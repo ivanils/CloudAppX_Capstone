@@ -1,0 +1,502 @@
+[
+  {
+    "id": "TIC-001",
+    "title": "Critical: Payment Gateway Timeout on High Load",
+    "module": "Backend / Payments",
+    "severity": 5,
+    "business_value": 10,
+    "effort_hours": 15,
+    "status": "Open",
+    "description": "Customers are getting 504 errors during checkout on weekends."
+  },
+  {
+    "id": "TIC-002",
+    "title": "Fix alignment in footer logo",
+    "module": "Frontend / UI",
+    "severity": 1,
+    "business_value": 2,
+    "effort_hours": 4,
+    "status": "Open",
+    "description": "The logo is shifted by 5px to the left in Safari."
+  },
+  {
+    "id": "TIC-003",
+    "title": "Database Deadlock in Reporting Module",
+    "module": "Database",
+    "severity": 4,
+    "business_value": 8,
+    "effort_hours": 25,
+    "status": "Open",
+    "description": "Generating the 'Yearly Report' causes the DB to freeze for 20s."
+  },
+  {
+    "id": "TIC-004",
+    "title": "Update deprecated React libraries",
+    "module": "Frontend / Core",
+    "severity": 3,
+    "business_value": 5,
+    "effort_hours": 40,
+    "status": "In Progress",
+    "description": "We are using React 16.8. Need to upgrade to 18 to avoid security risks."
+  },
+  {
+    "id": "TIC-005",
+    "title": "Security: SQL Injection vulnerability in Search",
+    "module": "Security",
+    "severity": 5,
+    "business_value": 10,
+    "effort_hours": 8,
+    "status": "Open",
+    "description": "Critical vulnerability found in the main search bar."
+  },
+  {
+    "id": "TIC-006",
+    "title": "Refactor Legacy Auth Controller",
+    "module": "Backend / Auth",
+    "severity": 3,
+    "business_value": 4,
+    "effort_hours": 60,
+    "status": "Open",
+    "description": "The code is messy ('spaghetti code') but it works. Hard to maintain."
+  },
+  {
+    "id": "TIC-007",
+    "title": "Optimize image compression for avatars",
+    "module": "Frontend / Performance",
+    "severity": 2,
+    "business_value": 3,
+    "effort_hours": 10,
+    "status": "Open",
+    "description": "User avatars load slowly on 3G connections."
+  },
+  {
+    "id": "TIC-008",
+    "title": "Add 'Dark Mode' feature",
+    "module": "Frontend / Feature",
+    "severity": 1,
+    "business_value": 6,
+    "effort_hours": 100,
+    "status": "Open",
+    "description": "Customer request. Nice to have, not critical."
+  },
+  {
+    "id": "TIC-009",
+    "title": "API Rate Limiting missing for public endpoints",
+    "module": "Backend / Security",
+    "severity": 4,
+    "business_value": 9,
+    "effort_hours": 12,
+    "status": "Open",
+    "description": "Risk of DDoS attack if we don't implement rate limiting soon."
+  },
+  {
+    "id": "TIC-010",
+    "title": "Typos in 'About Us' page",
+    "module": "Frontend / Content",
+    "severity": 1,
+    "business_value": 1,
+    "effort_hours": 1,
+    "status": "Open",
+    "description": "Spelling mistake in the CEO bio."
+  },
+  {
+    "id": "TIC-011",
+    "title": "Memory Leak in Notification Service",
+    "module": "Backend / Services",
+    "severity": 5,
+    "business_value": 9,
+    "effort_hours": 20,
+    "status": "Open",
+    "description": "Server crashes every 48 hours requiring restart."
+  },
+  {
+    "id": "TIC-012",
+    "title": "Slow loading of Dashboard Charts",
+    "module": "Frontend / Performance",
+    "severity": 3,
+    "business_value": 7,
+    "effort_hours": 30,
+    "status": "Open",
+    "description": "Charts take 5+ seconds to render for large clients."
+  },
+  {
+    "id": "TIC-013",
+    "title": "Unit Tests failing in CI pipeline",
+    "module": "DevOps",
+    "severity": 4,
+    "business_value": 6,
+    "effort_hours": 8,
+    "status": "Open",
+    "description": "Deployments are blocked because 3 tests are flaky."
+  },
+  {
+    "id": "TIC-014",
+    "title": "Remove unused CSS files",
+    "module": "Frontend / Cleanup",
+    "severity": 2,
+    "business_value": 2,
+    "effort_hours": 6,
+    "status": "Open",
+    "description": "Reduce bundle size by removing legacy styles."
+  },
+  {
+    "id": "TIC-015",
+    "title": "Export to PDF feature throws error 500",
+    "module": "Backend / Features",
+    "severity": 4,
+    "business_value": 8,
+    "effort_hours": 18,
+    "status": "Open",
+    "description": "Enterprise clients cannot download invoices."
+  },
+  {
+    "id": "TIC-016",
+    "title": "Lack of documentation for API V2",
+    "module": "Documentation",
+    "severity": 3,
+    "business_value": 5,
+    "effort_hours": 40,
+    "status": "Open",
+    "description": "New developers take too long to onboard due to missing docs."
+  },
+  {
+    "id": "TIC-017",
+    "title": "Switch from AWS S3 to Azure Blob (Cost saving)",
+    "module": "Infrastructure",
+    "severity": 2,
+    "business_value": 5,
+    "effort_hours": 120,
+    "status": "Open",
+    "description": "Strategic move to reduce cloud bill. High effort."
+  },
+  {
+    "id": "TIC-018",
+    "title": "Login page not responsive on mobile",
+    "module": "Frontend / UI",
+    "severity": 3,
+    "business_value": 6,
+    "effort_hours": 10,
+    "status": "Open",
+    "description": "Mobile users cannot click the 'Login' button easily."
+  },
+  {
+    "id": "TIC-019",
+    "title": "Hardcoded credentials in config file",
+    "module": "Security",
+    "severity": 5,
+    "business_value": 10,
+    "effort_hours": 2,
+    "status": "Open",
+    "description": "Critical security risk. Needs immediate fix."
+  },
+  {
+    "id": "TIC-020",
+    "title": "Add 'Export to Excel' for Admins",
+    "module": "Backend / Feature",
+    "severity": 2,
+    "business_value": 4,
+    "effort_hours": 16,
+    "status": "Open",
+    "description": "Feature request from Sales team."
+  },
+  {
+    "id": "TIC-021",
+    "title": "Missing Index on 'Order History' table",
+    "module": "Database",
+    "severity": 4,
+    "business_value": 8,
+    "effort_hours": 4,
+    "status": "Open",
+    "description": "Querying past orders takes >10s due to full table scan."
+  },
+  {
+    "id": "TIC-022",
+    "title": "Security: XSS vulnerability in User Comments",
+    "module": "Security",
+    "severity": 5,
+    "business_value": 10,
+    "effort_hours": 12,
+    "status": "Open",
+    "description": "Malicious scripts can be injected into the product review section."
+  },
+  {
+    "id": "TIC-023",
+    "title": "Broken favicon on Landing Page",
+    "module": "Frontend / UI",
+    "severity": 1,
+    "business_value": 1,
+    "effort_hours": 1,
+    "status": "Open",
+    "description": "The browser tab icon returns a 404 error on the home page."
+  },
+  {
+    "id": "TIC-024",
+    "title": "Implement Two-Factor Authentication (2FA)",
+    "module": "Backend / Security",
+    "severity": 3,
+    "business_value": 9,
+    "effort_hours": 80,
+    "status": "Open",
+    "description": "Required for compliance. Support Google Authenticator app."
+  },
+  {
+    "id": "TIC-025",
+    "title": "API Gateway Timeout on Batch Processing",
+    "module": "Backend / Services",
+    "severity": 4,
+    "business_value": 7,
+    "effort_hours": 20,
+    "status": "Open",
+    "description": "Batch uploads larger than 10MB time out after 60 seconds."
+  },
+  {
+    "id": "TIC-026",
+    "title": "Typo in 'Password Reset' success message",
+    "module": "Frontend / Content",
+    "severity": 1,
+    "business_value": 2,
+    "effort_hours": 1,
+    "status": "Open",
+    "description": "Message says 'email sent to you're inbox'."
+  },
+  {
+    "id": "TIC-027",
+    "title": "Upgrade PostgreSQL to version 15",
+    "module": "Infrastructure",
+    "severity": 3,
+    "business_value": 6,
+    "effort_hours": 40,
+    "status": "Open",
+    "description": "Current version reaches EOL next month. Need upgrade strategy."
+  },
+  {
+    "id": "TIC-028",
+    "title": "Docker container restart loop in Staging",
+    "module": "DevOps",
+    "severity": 5,
+    "business_value": 8,
+    "effort_hours": 6,
+    "status": "In Progress",
+    "description": "Staging environment is unstable due to configuration drift."
+  },
+  {
+    "id": "TIC-029",
+    "title": "Pagination broken on 'All Users' list",
+    "module": "Frontend / Core",
+    "severity": 3,
+    "business_value": 5,
+    "effort_hours": 8,
+    "status": "Open",
+    "description": "Clicking 'Next Page' reloads the first page data."
+  },
+  {
+    "id": "TIC-030",
+    "title": "Missing Alt Text for Product Images",
+    "module": "Frontend / Accessibility",
+    "severity": 2,
+    "business_value": 4,
+    "effort_hours": 16,
+    "status": "Open",
+    "description": "Screen readers cannot describe images. SEO impact."
+  },
+  {
+    "id": "TIC-031",
+    "title": "Cache Invalidation Issue on Price Updates",
+    "module": "Backend / Core",
+    "severity": 4,
+    "business_value": 9,
+    "effort_hours": 12,
+    "status": "Open",
+    "description": "Users see old prices for up to 1 hour after admin updates."
+  },
+  {
+    "id": "TIC-032",
+    "title": "404 Error on 'Help Center' link",
+    "module": "Frontend / Content",
+    "severity": 2,
+    "business_value": 3,
+    "effort_hours": 2,
+    "status": "Open",
+    "description": "The link in the user dropdown redirects to a broken URL."
+  },
+  {
+    "id": "TIC-033",
+    "title": "Add Multi-Language Support (Spanish)",
+    "module": "Frontend / Feature",
+    "severity": 2,
+    "business_value": 7,
+    "effort_hours": 150,
+    "status": "Open",
+    "description": "Prepare architecture for i18n and add Spanish translations."
+  },
+  {
+    "id": "TIC-034",
+    "title": "JWT Token Expiration Bug",
+    "module": "Backend / Auth",
+    "severity": 4,
+    "business_value": 8,
+    "effort_hours": 10,
+    "status": "Open",
+    "description": "Tokens expire 1 hour earlier than configured in env vars."
+  },
+  {
+    "id": "TIC-035",
+    "title": "Increase File Upload Limit to 50MB",
+    "module": "Backend / Feature",
+    "severity": 2,
+    "business_value": 5,
+    "effort_hours": 4,
+    "status": "Open",
+    "description": "Clients need to upload high-res PDF blueprints."
+  },
+  {
+    "id": "TIC-036",
+    "title": "Sidebar navigation overlaps content on iPad",
+    "module": "Frontend / UI",
+    "severity": 2,
+    "business_value": 4,
+    "effort_hours": 8,
+    "status": "Open",
+    "description": "Layout breaks on tablet portrait mode (768px)."
+  },
+  {
+    "id": "TIC-037",
+    "title": "GDPR: Add 'Delete Account' self-service",
+    "module": "Backend / Compliance",
+    "severity": 4,
+    "business_value": 9,
+    "effort_hours": 35,
+    "status": "Open",
+    "description": "Users must be able to delete their data without emailing support."
+  },
+  {
+    "id": "TIC-038",
+    "title": "Slow Query Log: Analytics Dashboard",
+    "module": "Database",
+    "severity": 3,
+    "business_value": 6,
+    "effort_hours": 16,
+    "status": "Open",
+    "description": "Optimize the aggregation query for weekly sales stats."
+  },
+  {
+    "id": "TIC-039",
+    "title": "Update Node.js to LTS (v20)",
+    "module": "Backend / Core",
+    "severity": 3,
+    "business_value": 5,
+    "effort_hours": 24,
+    "status": "Open",
+    "description": "Keep up to date with LTS for security and performance patches."
+  },
+  {
+    "id": "TIC-040",
+    "title": "Broken images in 'Welcome' email",
+    "module": "Backend / Services",
+    "severity": 2,
+    "business_value": 3,
+    "effort_hours": 4,
+    "status": "Open",
+    "description": "Email templates point to staging bucket instead of production."
+  },
+  {
+    "id": "TIC-041",
+    "title": "Race Condition in Inventory Management",
+    "module": "Backend / Logic",
+    "severity": 5,
+    "business_value": 10,
+    "effort_hours": 30,
+    "status": "Open",
+    "description": "Stock count goes negative if two users buy the last item simultaneously."
+  },
+  {
+    "id": "TIC-042",
+    "title": "Setup Slack Alerts for Server Errors",
+    "module": "DevOps",
+    "severity": 3,
+    "business_value": 6,
+    "effort_hours": 6,
+    "status": "Open",
+    "description": "Connect CloudWatch alarms to Slack channel #ops-alerts."
+  },
+  {
+    "id": "TIC-043",
+    "title": "Search filters not clearing correctly",
+    "module": "Frontend / Core",
+    "severity": 3,
+    "business_value": 4,
+    "effort_hours": 6,
+    "status": "Open",
+    "description": "Reset button leaves the 'Date Range' filter active."
+  },
+  {
+    "id": "TIC-044",
+    "title": "Optimize Background Job Worker",
+    "module": "Backend / Performance",
+    "severity": 3,
+    "business_value": 5,
+    "effort_hours": 20,
+    "status": "Open",
+    "description": "Queue processing is lagging during peak hours."
+  },
+  {
+    "id": "TIC-045",
+    "title": "Breadcrumbs missing on Profile sub-pages",
+    "module": "Frontend / UI",
+    "severity": 1,
+    "business_value": 2,
+    "effort_hours": 3,
+    "status": "Open",
+    "description": "Navigation is difficult when deep inside settings."
+  },
+  {
+    "id": "TIC-046",
+    "title": "Invoice Rounding Error (0.01 cents)",
+    "module": "Backend / Finance",
+    "severity": 5,
+    "business_value": 9,
+    "effort_hours": 14,
+    "status": "Open",
+    "description": "Floating point math issue causing tax discrepancies."
+  },
+  {
+    "id": "TIC-047",
+    "title": "Implement Swagger UI for API Docs",
+    "module": "Documentation",
+    "severity": 2,
+    "business_value": 5,
+    "effort_hours": 12,
+    "status": "Open",
+    "description": "Auto-generate documentation from code annotations."
+  },
+  {
+    "id": "TIC-048",
+    "title": "Primary Button color mismatch",
+    "module": "Frontend / UI",
+    "severity": 1,
+    "business_value": 2,
+    "effort_hours": 2,
+    "status": "Open",
+    "description": "Using wrong hex code #0055AA instead of brand #004499."
+  },
+  {
+    "id": "TIC-049",
+    "title": "Session persistence fails on browser restart",
+    "module": "Frontend / Auth",
+    "severity": 3,
+    "business_value": 7,
+    "effort_hours": 8,
+    "status": "Open",
+    "description": "Users are forced to login again if they close Chrome."
+  },
+  {
+    "id": "TIC-050",
+    "title": "Refactor 'UserManager' God Class",
+    "module": "Backend / Cleanup",
+    "severity": 2,
+    "business_value": 3,
+    "effort_hours": 50,
+    "status": "Open",
+    "description": "Class has 4000 lines of code. Needs to be split into services."
+  }
+]
