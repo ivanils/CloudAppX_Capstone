@@ -41,7 +41,7 @@
   },
   {
     "id": "TIC-005",
-    "title": "Security: SQL Injection vulnerability in Search",
+    "title": "SQL Injection vulnerability in Search",
     "module": "Security",
     "severity": 5,
     "business_value": 10,
@@ -211,7 +211,7 @@
   },
   {
     "id": "TIC-022",
-    "title": "Security: XSS vulnerability in User Comments",
+    "title": "XSS vulnerability in User Comments",
     "module": "Security",
     "severity": 5,
     "business_value": 10,
