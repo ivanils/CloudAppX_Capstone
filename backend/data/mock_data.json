@@ -165,7 +165,7 @@
     "module": "Infrastructure",
     "severity": 2,
     "business_value": 5,
-    "effort_hours": 120,
+    "effort_hours": 85,
     "status": "Open",
     "description": "Strategic move to reduce cloud bill. High effort."
   },
@@ -325,7 +325,7 @@
     "module": "Frontend / Feature",
     "severity": 2,
     "business_value": 7,
-    "effort_hours": 150,
+    "effort_hours": 90,
     "status": "Open",
     "description": "Prepare architecture for i18n and add Spanish translations."
   },
