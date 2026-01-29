@@ -4,393 +4,657 @@ $glass-bg: rgba(255, 255, 255, 0.07);
 $glass-border: rgba(255, 255, 255, 0.12);
 $glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 
-$primary-blue: #06b6d4; 
+$primary-blue: #06b6d4;
 $primary-purple: #8b5cf6;
-$highlight-orange: #f97316; 
+$highlight-orange: #f97316;
 $text-white: #f8fafc;
 $text-muted: #94a3b8;
 
 // Mixins
 @mixin glass-panel {
-  background: $glass-bg;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid $glass-border;
-  border-radius: 16px;
-  box-shadow: $glass-shadow;
+    background: $glass-bg;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid $glass-border;
+    border-radius: 16px;
+    box-shadow: $glass-shadow;
 }
 
 @mixin neo-button {
-  background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-  border: 1px solid $glass-border;
-  color: $text-white;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: 600;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    border: 1px solid $glass-border;
+    color: $text-white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
 
-  &:hover {
-    background: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 0 15px rgba($primary-blue, 0.3);
-    border-color: $primary-blue;
-  }
+    &:hover {
+        background: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 0 15px rgba($primary-blue, 0.3);
+        border-color: $primary-blue;
+    }
 }
 
 // global styles
 body {
-  margin: 0;
-  background: $bg-gradient;
-  background-attachment: fixed; 
-  color: $text-white;
-  font-family: 'Exo 2', 'Inter', sans-serif;
-  min-height: 100vh;
+    margin: 0;
+    background: $bg-gradient;
+    background-attachment: fixed;
+    color: $text-white;
+    font-family: 'Exo 2', 'Inter', sans-serif;
+    min-height: 100vh;
 }
 
 .app-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
 }
 
 // Different screens styles
 
 // Welcome screen
 .welcome-screen {
-  text-align: center;
-  @include glass-panel;
-  padding: 60px;
-  max-width: 600px;
-  animation: fadeIn 1s ease-in;
+    text-align: center;
+    @include glass-panel;
+    padding: 60px;
+    max-width: 600px;
+    animation: fadeIn 1s ease-in;
 
-  h1 {
-    font-size: 3.5rem;
-    background: -webkit-linear-gradient($primary-blue, $primary-purple);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 10px;
-  }
-
-  p {
-    font-size: 1.2rem;
-    color: $text-muted;
-    margin-bottom: 40px;
-  }
-
-  .start-btn {
-    background: $highlight-orange;
-    border: none;
-    padding: 15px 40px;
-    font-size: 1.2rem;
-    color: white;
-    border-radius: 30px;
-    cursor: pointer;
-    box-shadow: 0 0 20px rgba($highlight-orange, 0.4);
-    transition: transform 0.2s;
-
-    &:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 30px rgba($highlight-orange, 0.6);
+    h1 {
+        font-size: 3.5rem;
+        background: -webkit-linear-gradient($primary-blue, $primary-purple);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 10px;
     }
-  }
+
+    p {
+        font-size: 1.2rem;
+        color: $text-muted;
+        margin-bottom: 40px;
+    }
+
+    .start-btn {
+        background: $highlight-orange;
+        border: none;
+        padding: 15px 40px;
+        font-size: 1.2rem;
+        color: white;
+        border-radius: 30px;
+        cursor: pointer;
+        box-shadow: 0 0 20px rgba($highlight-orange, 0.4);
+        transition: transform 0.2s;
+
+        &:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba($highlight-orange, 0.6);
+        }
+    }
 }
 
 // Dashboard screen
 .dashboard-container {
-  width: 100%;
-  max-width: 1200px;
-  animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    width: 100%;
+    max-width: 1200px;
+    animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 
-  header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-    padding: 20px;
-    @include glass-panel;
-
-    .brand {
-      h2 { margin: 0; color: $primary-blue; }
-      span { font-size: 0.8rem; color: $text-muted; letter-spacing: 1px; }
-    }
-  }
-
-  // Search and Sort controls
-  .controls-bar {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-
-    .search-box {
-      flex: 1;
-      position: relative;
-      
-      input {
-        width: 100%;
-        padding: 12px 15px 12px 45px; 
-        background: rgba(0,0,0,0.2);
-        border: 1px solid $glass-border;
-        border-radius: 10px;
-        color: white;
-        font-size: 1rem;
-        
-        &:focus {
-          outline: none;
-          border-color: $primary-purple;
-        }
-      }
-      
-      .search-icon {
-        position: absolute;
-        left: 15px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: $text-muted;
-      }
-    }
-
-    .filter-btn, .view-toggle-btn {
-      @include neo-button;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      
-      &.active {
-        background: rgba($primary-purple, 0.3);
-        border-color: $primary-purple;
-      }
-    }
-  }
-
-  // tickets display (Grid and List)
-  .tickets-container {
-    display: grid;
-    gap: 15px;
-    
-    // Grid mode (cards)
-    &.grid-view {
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      
-      .ticket-card {
-        @include glass-panel;
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
         padding: 20px;
-        transition: transform 0.2s;
+        @include glass-panel;
 
-        &:hover {
-          transform: translateY(-5px);
-          border-color: rgba($highlight-orange, 0.5);
+        .brand {
+            h2 {
+                margin: 0;
+                color: $primary-blue;
+            }
+
+            span {
+                font-size: 0.8rem;
+                color: $text-muted;
+                letter-spacing: 1px;
+            }
+        }
+    }
+
+    // Search and Sort controls
+    .controls-bar {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+
+        .search-box {
+            flex: 1;
+            position: relative;
+
+            input {
+                width: 100%;
+                padding: 12px 15px 12px 45px;
+                background: rgba(0, 0, 0, 0.2);
+                border: 1px solid $glass-border;
+                border-radius: 10px;
+                color: white;
+                font-size: 1rem;
+
+                &:focus {
+                    outline: none;
+                    border-color: $primary-purple;
+                }
+            }
+
+            .search-icon {
+                position: absolute;
+                left: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: $text-muted;
+            }
         }
 
-        .card-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-          margin-bottom: 15px;
-
-          .score-circle {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+        .filter-btn,
+        .view-toggle-btn {
+            @include neo-button;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            background: rgba($highlight-orange, 0.2);
-            color: $highlight-orange;
-            border: 1px solid $highlight-orange;
-          }
+            gap: 8px;
+
+            &.active {
+                background: rgba($primary-purple, 0.3);
+                border-color: $primary-purple;
+            }
         }
-      }
     }
 
-    // Listo mode (list)
-    &.list-view {
-      grid-template-columns: 1fr;
-      
-      .ticket-card {
-        @include glass-panel;
-        display: flex;
-        align-items: center;
-        padding: 15px 25px;
-        justify-content: space-between;
-        
-        .card-header, .card-body, .card-footer {
-          margin: 0;
-          display: flex;
-          align-items: center;
-          gap: 20px;
+    // tickets display (Grid and List)
+    .tickets-container {
+        display: grid;
+        gap: 15px;
+
+        // Grid mode (cards)
+        &.grid-view {
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+
+            .ticket-card {
+                @include glass-panel;
+                padding: 20px;
+                transition: transform 0.2s;
+
+                &:hover {
+                    transform: translateY(-5px);
+                    border-color: rgba($highlight-orange, 0.5);
+                }
+
+                .card-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: flex-start;
+                    margin-bottom: 15px;
+
+                    .score-circle {
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-weight: bold;
+                        background: rgba($highlight-orange, 0.2);
+                        color: $highlight-orange;
+                        border: 1px solid $highlight-orange;
+                    }
+                }
+            }
         }
-      }
+
+        // Listo mode (list)
+        &.list-view {
+            grid-template-columns: 1fr;
+
+            .ticket-card {
+                @include glass-panel;
+                display: flex;
+                align-items: center;
+                padding: 15px 25px;
+                justify-content: space-between;
+
+                .card-header,
+                .card-body,
+                .card-footer {
+                    margin: 0;
+                    display: flex;
+                    align-items: center;
+                    gap: 20px;
+                }
+            }
+        }
     }
-  }
 }
 
 // loading spinner
 .loading-screen {
-  text-align: center;
-  
-  .spinner {
-    width: 50px;
-    height: 50px;
-    border: 3px solid rgba(255,255,255,0.1);
-    border-radius: 50%;
-    border-top-color: $highlight-orange;
-    animation: spin 1s ease-in-out infinite;
-    margin: 0 auto 20px;
-  }
+    text-align: center;
+
+    .spinner {
+        width: 50px;
+        height: 50px;
+        border: 3px solid rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        border-top-color: $highlight-orange;
+        animation: spin 1s ease-in-out infinite;
+        margin: 0 auto 20px;
+    }
 }
 
 // animations
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
 
 // UTILS
 .tag {
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  font-weight: bold;
-  
-  &.high { background: rgba(220, 38, 38, 0.3); color: #fca5a5; } // Red
-  &.med { background: rgba(234, 179, 8, 0.3); color: #fde047; } // Yellow
-  &.low { background: rgba(22, 163, 74, 0.3); color: #86efac; } // Green
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: bold;
+
+    &.high {
+        background: rgba(220, 38, 38, 0.3);
+        color: #fca5a5;
+    }
+
+    // Red
+    &.med {
+        background: rgba(234, 179, 8, 0.3);
+        color: #fde047;
+    }
+
+    // Yellow
+    &.low {
+        background: rgba(22, 163, 74, 0.3);
+        color: #86efac;
+    }
+
+    // Green
 }
+
 // Chart animations and interactivity
 
 // Floating animation for chart dots
 @keyframes floatDot {
-  0% { transform: translateY(0px); filter: brightness(1); }
-  50% { transform: translateY(-6px); filter: brightness(1.3); box-shadow: 0 0 10px rgba($primary-blue, 0.5); }
-  100% { transform: translateY(0px); filter: brightness(1); }
+    0% {
+        transform: translateY(0px);
+        filter: brightness(1);
+    }
+
+    50% {
+        transform: translateY(-6px);
+        filter: brightness(1.3);
+        box-shadow: 0 0 10px rgba($primary-blue, 0.5);
+    }
+
+    100% {
+        transform: translateY(0px);
+        filter: brightness(1);
+    }
 }
 
 // 2. Class for the dots in the priority chart
 .chart-dot {
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-  cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
 
-  &:hover {
-    animation: floatDot 1.5s infinite ease-in-out;
-    r: 8;
-  }
+    &:hover {
+        animation: floatDot 1.5s infinite ease-in-out;
+        r: 8;
+    }
 
-  // selected state for when the card is clicked
-  &.selected {
-    fill: $highlight-orange !important; 
-    r: 10; 
-    filter: drop-shadow(0 0 8px rgba($highlight-orange, 0.6)); 
-    z-index: 100;
-  }
+    // selected state for when the card is clicked
+    &.selected {
+        fill: $highlight-orange !important;
+        r: 10;
+        filter: drop-shadow(0 0 8px rgba($highlight-orange, 0.6));
+        z-index: 100;
+    }
 }
 
 // selected state for ticket cards
 .ticket-card.is-selected {
-  border-color: $highlight-orange;
-  background: rgba($highlight-orange, 0.05);
-  box-shadow: 0 0 15px rgba($highlight-orange, 0.2);
+    border-color: $highlight-orange;
+    background: rgba($highlight-orange, 0.05);
+    box-shadow: 0 0 15px rgba($highlight-orange, 0.2);
 
-  .score-circle {
-    background: $highlight-orange !important;
-    color: white !important;
-    box-shadow: 0 0 10px rgba($highlight-orange, 0.5);
-  }
+    .score-circle {
+        background: $highlight-orange !important;
+        color: white !important;
+        box-shadow: 0 0 10px rgba($highlight-orange, 0.5);
+    }
 }
+
 // Carousel aniamtions
 
 // Overflow container for the charts
 .chart-carousel-container {
-  overflow: hidden; 
-  position: relative;
-  min-height: 400px;
+    overflow: hidden;
+    position: relative;
+    min-height: 400px;
 }
 
 //Entrance animation (from the right)
 .slide-enter {
-  animation: slideInRight 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    animation: slideInRight 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
 // Exit animation (to the left)
 .slide-exit {
-  animation: slideOutLeft 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    animation: slideOutLeft 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
 @keyframes slideInRight {
-  from { opacity: 0; transform: translateX(100px); filter: blur(4px); }
-  to { opacity: 1; transform: translateX(0); filter: blur(0); }
+    from {
+        opacity: 0;
+        transform: translateX(100px);
+        filter: blur(4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+        filter: blur(0);
+    }
 }
 
 @keyframes slideOutLeft {
-  from { opacity: 1; transform: translateX(0); filter: blur(0); }
-  to { opacity: 0; transform: translateX(-100px); filter: blur(4px); }
+    from {
+        opacity: 1;
+        transform: translateX(0);
+        filter: blur(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateX(-100px);
+        filter: blur(4px);
+    }
 }
 
 // Carousel navigation tabs
 .chart-tabs {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin-bottom: 20px;
-
-  button {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: $text-muted;
-    padding: 10px 20px;
-    border-radius: 30px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
     display: flex;
-    align-items: center;
-    gap: 8px;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
 
-    &:hover {
-      background: rgba(255, 255, 255, 0.1);
-      color: $text-white;
+    button {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: $text-muted;
+        padding: 10px 20px;
+        border-radius: 30px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: $text-white;
+        }
+
+        &.active {
+            background: rgba($primary-blue, 0.2);
+            border-color: $primary-blue;
+            color: $primary-blue;
+            box-shadow: 0 0 15px rgba($primary-blue, 0.2);
+
+            &.danger {
+                background: rgba($highlight-orange, 0.2);
+                border-color: $highlight-orange;
+                color: $highlight-orange;
+                box-shadow: 0 0 15px rgba($highlight-orange, 0.2);
+            }
+
+            &.success {
+                background: rgba(34, 197, 94, 0.2); // Green
+                border-color: #22c55e;
+                color: #22c55e;
+                box-shadow: 0 0 15px rgba(34, 197, 94, 0.2);
+            }
+        }
     }
-
-    &.active {
-      background: rgba($primary-blue, 0.2);
-      border-color: $primary-blue;
-      color: $primary-blue;
-      box-shadow: 0 0 15px rgba($primary-blue, 0.2);
-
-      &.danger {
-        background: rgba($highlight-orange, 0.2);
-        border-color: $highlight-orange;
-        color: $highlight-orange;
-        box-shadow: 0 0 15px rgba($highlight-orange, 0.2);
-      }
-      
-      &.success {
-        background: rgba(34, 197, 94, 0.2); // Green
-        border-color: #22c55e;
-        color: #22c55e;
-        box-shadow: 0 0 15px rgba(34, 197, 94, 0.2);
-      }
-    }
-  }
 }
+
 // Interative chart elements
 
 // topchart bars
 .bar-cell-interactive {
-  cursor: pointer;          
-  transition: all 0.3s ease; 
+    cursor: pointer;
+    transition: all 0.3s ease;
 
-  &:hover {
-    filter: brightness(1.5) saturate(1.2); 
-    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
-    opacity: 1 !important;
-  }
+    &:hover {
+        filter: brightness(1.5) saturate(1.2);
+        filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+        opacity: 1 !important;
+    }
 }
 
 html {
-  scroll-behavior: smooth;
+    scroll-behavior: smooth;
+}
+
+// AI chat widget styles
+.ai-trigger-btn {
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 30px;
+    display: flex;
+    align-self: center;
+    gap: 8;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.ai-modal-overlay {
+    position: 'fixed';
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.ai-panel {
+    width: 600px;
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 16px;
+    padding: 30px;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+
+    button {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: none;
+        border: none;
+        color: #94a3b8;
+        cursor: pointer;
+    }
+
+    .ai-panel-top {
+        text-align: center;
+        margin-bottom: 20px;
+
+        .ai-icon-circle {
+            width: 60px;
+            height: 60px;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        h2 {
+            color: white;
+            margin: 0;
+        }
+
+        p {
+            color: #94a3b8;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+    }
+    .ai-panel-content {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 20px;
+        min-height: 200px;
+        color: #e2e8f0;
+        line-height: 1.6;
+        .ai-loading{
+            text-align: center;
+            padding: 40px 0;
+        }
+    }
+}
+// SPRINT SIMULATOR STYLES
+.card{
+    background: linear-gradient(145deg, #1e293b, #0f172a);
+    border: 1px solid #334155;
+    .card-header{
+        display: flex;
+        align-items: center;
+        gap: 10;
+        margin-bottom: 20;
+        h3{
+            margin: 0;
+            color: white;
+        }
+    }
+    .capacity-control{
+        margin-bottom: 25;
+        .capacity-label{
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10;
+            color: #94a3b8;
+            strong{
+                color: #22c55e;
+            }
+        }
+        .capacity-slider{
+            width: 100%;
+            cursor: pointer;
+            accent-color: #22c55e;
+        }
+    }
+    .simulation-results{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15;
+        .simulation-result-card{
+            background: rgba(255,255,255,0.05);
+            padding: 15;
+            border-radius: 10;
+            text-align: center;
+            .selected-count{
+                font-size: 2rem;
+                font-weight: bold;
+                color: white;
+            }
+            .result-label{
+                font-size: 0.8rem;
+                color: #94a3b8;    
+            }
+            .total_value{
+                font-size: 2rem;
+                font-weight: bold;
+                color: #06b6d4;
+            }
+            .result-value{
+                font-size: 2rem;
+                color: #94a3b8;
+            }
+        }
+    }
+    .selection-details{
+        margin-top: 20;
+        padding-top: 15;
+        border-top: 1px solid rgba(255,255,255,0.1);
+        p{
+            font-size: 0.9rem;
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            gap: 5;
+        }
+        .tag-container{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5;
+            span.tag{
+                background: rgba(34, 197, 94, 0.2);
+                color: #4ade80;
+                font-size: 0.7rem;
+            }
+        }
+    }
+}
+.export-btn{
+    background: rgba(255,255,255,0.1);
+    border: 1px solid #475569; color: #cbd5e1;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    display: flex;
+    gap: 5; 
 }

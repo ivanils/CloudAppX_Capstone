@@ -15,7 +15,7 @@ const CustomizedDot = (props) => {
     <circle
       cx={cx}
       cy={cy}
-      r={6} 
+      r={isSelected ? 10 : 6}
       fill="#06b6d4"
       stroke="none"
       className={`chart-dot ${isSelected ? 'selected' : ''}`}
@@ -53,7 +53,7 @@ const PriorityChart = ({ tickets, selectedId, onTicketClick }) => {
           <XAxis type="number" dataKey="effort_hours" name="Effort" unit="h" stroke="#94a3b8" tick={{fill: '#64748b'}}>
              <Label value="Effort (Hours)" offset={-20} position="insideBottom" fill="#64748b" />
           </XAxis>
-          <YAxis type="number" dataKey="business_value" name="Value" unit="$" stroke="#94a3b8" tick={{fill: '#64748b'}}>
+          <YAxis type="number" dataKey="business_value" name="Value" stroke="#94a3b8" tick={{fill: '#64748b'}} domain={[0, 10]} ticks={[0, 2, 4, 6, 8, 10]}>
              <Label value="Business Value" angle={-90} position="insideLeft" fill="#64748b" style={{textAnchor: 'middle'}} />
           </YAxis>
           
