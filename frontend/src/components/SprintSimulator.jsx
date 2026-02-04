@@ -1,9 +1,9 @@
 import React, { useState, useMemo } from "react";
-import { Gauge, CheckCircle, AlertTriangle } from 'lucide-react';
+import { Gauge, CheckCircle, Info } from 'lucide-react';
 
 const SprintSimulator = ({ tickets }) => {
-    const [capacity, setCapacity] = useState(0); // default capacity in hours
-
+    const [capacity, setCapacity] = useState(10); // default capacity in hours
+    const [isExpanded, setIsExpanded] = useState(false);
     // smart algorithm to select tickets based on capacity
     const simulation = useMemo(() => {
         if (!tickets || !Array.isArray(tickets) || tickets.length === 0 || capacity <= 0) {
@@ -11,7 +11,8 @@ const SprintSimulator = ({ tickets }) => {
                 currentHours: 0,
                 totalValue: 0,
                 selectedCount: 0,
-                selectedTickets: []
+                selectedTickets: [],
+                candidates: []
             };
         }
 
@@ -22,6 +23,10 @@ const SprintSimulator = ({ tickets }) => {
             const effort = Number(t.effort_hours) || 1; // Avoid division by zero
             return {
                 ...t,
+                id: t.id ? String(t.id) : 'N/A',
+                title: t.title ? String(t.title) : 'No Title',
+                business_value: val,
+                effort_hours: effort,
                 safe_val: val,
                 safe_effort: effort,
                 roi: val / effort
@@ -42,7 +47,7 @@ const SprintSimulator = ({ tickets }) => {
                 currentHours += ticket.effort_hours;
                 totalValue += ticket.business_value;
                 selectedCount++;
-                if (ticket.id) selectedTickets.push(ticket.id);
+                selectedTickets.push(ticket);
             }
         }
         return {
@@ -56,7 +61,7 @@ const SprintSimulator = ({ tickets }) => {
 
     return (
         <div className="card">
-            <div className="car-header">
+            <div className="card-header">
                 <Gauge color="#22c55e" />
                 <h3>Sprint Planning Simulator</h3>
             </div>
@@ -68,7 +73,7 @@ const SprintSimulator = ({ tickets }) => {
                 </div>
                 <input
                     type="range"
-                    min="0" max="300" step="10"
+                    min="0" max="300" step="1"
                     value={capacity}
                     onChange={(e) => setCapacity(Number(e.target.value))}
                     className="capacity-slider"
@@ -86,7 +91,7 @@ const SprintSimulator = ({ tickets }) => {
                 </div>
             </div>
 
-            {capacity > 0 && (
+            {/* {capacity > 0 && (
                 <div className="selection-details">
                     <p>
                         <CheckCircle size={14} color="#22c55e" /> Optimal selection includes:
@@ -98,6 +103,60 @@ const SprintSimulator = ({ tickets }) => {
                             </span>
                         ))}
                         {simulation.selectedTickets.length > 5 && <span className="tag" style={{ color: '#94a3b8' }}>+{simulation.selectedTickets.length - 5} more</span>}
+                    </div>
+                </div>
+            )} */}
+            {capacity > 0 && (
+                <div style={{ paddingTop: 15, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                        <p style={{ fontSize: '0.9rem', color: '#94a3b8', margin: 0, display: 'flex', alignItems: 'center', gap: 5 }}>
+                            <CheckCircle size={14} color="#22c55e" /> Optimal selection:
+                        </p>
+                        {simulation.selectedTickets.length > 6 && (
+                            <button
+                                onClick={() => setIsExpanded(!isExpanded)}
+                                style={{ background: 'none', border: 'none', color: '#60a5fa', cursor: 'pointer', fontSize: '0.8rem' }}
+                            >
+                                {isExpanded ? 'Show Less' : 'Show All'}
+                            </button>
+                        )}
+                    </div>
+
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, maxHeight: 'auto',  padding: '5px', paddingTop: 0 }}>
+                        {simulation.selectedTickets.length > 0 ? (
+                            // Mostramos todos si está expandido, si no solo los primeros 6
+                            (isExpanded ? simulation.selectedTickets : simulation.selectedTickets.slice(0, 6)).map((ticket, idx) => (
+
+                                // --- TOOLTIP CONTAINER ---
+                                <div key={idx} className="tooltip-container" style={{ position: 'relative' }}>
+
+                                    <span className="tag" style={{ background: 'rgba(34, 197, 94, 0.2)', color: '#4ade80', fontSize: '0.75rem', padding: '4px 10px', borderRadius: '12px', cursor: 'help' }}>
+                                        {ticket.id}
+                                    </span>
+
+                                    {/* EL TOOLTIP FLOTANTE */}
+                                    <div className="tooltip-content">
+                                        <strong>{ticket.title}</strong>
+                                        <div style={{ marginTop: 5, fontSize: '0.8rem', color: '#cbd5e1' }}>
+                                            ROI: {ticket.roi.toFixed(1)} | Value: {ticket.safe_val} | Cost: {ticket.safe_effort}h
+                                        </div>
+                                    </div>
+
+                                </div>
+                            ))
+                        ) : (
+                            <span style={{ fontSize: '0.8rem', color: '#64748b' }}>No tickets fit.</span>
+                        )}
+
+                        {!isExpanded && simulation.selectedTickets.length > 6 && (
+                            <span
+                                onClick={() => setIsExpanded(true)}
+                                className="tag"
+                                style={{ background: 'rgba(255, 255, 255, 0.1)', color: '#94a3b8', cursor: 'pointer', fontSize: '0.75rem', padding: '4px 10px' }}
+                            >
+                                +{simulation.selectedTickets.length - 6} more...
+                            </span>
+                        )}
                     </div>
                 </div>
             )}

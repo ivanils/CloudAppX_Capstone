@@ -1,3 +1,75 @@
+// RESET
+* {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    box-sizing: border-box;
+    vertical-align: baseline;
+    line-height: 1.5em;
+}
+
+img {
+    max-width: 100%;
+    width: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center center;
+}
+
+video {
+    max-width: 100%;
+    width: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center center;
+}
+
+p a {
+    display: inline;
+}
+
+li {
+    list-style-type: none;
+}
+
+table,
+tr,
+td {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+::selection {
+    background-color: var(--negro);
+    color: var(--blanco);
+}
+
+form,
+input,
+textarea,
+select,
+button,
+label {
+    font-family: inherit;
+    font-size: inherit;
+    background-color: transparent;
+    display: block;
+}
+
+body {
+    font-family: var(--tipo-principal);
+    font-size: 100%;
+    min-height: 100vh;
+    background-color: var(--blanco);
+    font-smooth: always;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
 // Colors 
 $bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
 $glass-bg: rgba(255, 255, 255, 0.07);
@@ -38,6 +110,11 @@ $text-muted: #94a3b8;
 }
 
 // global styles
+#root {
+    width: 100%;
+    max-width: 100%;
+}
+
 body {
     margin: 0;
     background: $bg-gradient;
@@ -45,6 +122,7 @@ body {
     color: $text-white;
     font-family: 'Exo 2', 'Inter', sans-serif;
     min-height: 100vh;
+    overflow-x: hidden;
 }
 
 .app-container {
@@ -52,7 +130,6 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    padding: 20px;
 }
 
 // Different screens styles
@@ -64,6 +141,10 @@ body {
     padding: 60px;
     max-width: 600px;
     animation: fadeIn 1s ease-in;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
     h1 {
         font-size: 3.5rem;
@@ -100,17 +181,71 @@ body {
 
 // Dashboard screen
 .dashboard-container {
-    width: 100%;
-    max-width: 1200px;
+    width: 95%;
     animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
     header {
+        transition: all 0.5s ease;
+        border: 1px solid rgba(255, 255, 255, 0.12);
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 30px;
+        width: 100%;
         padding: 20px;
         @include glass-panel;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+
+        &.header-ai-mode {
+            border-color: #a855f7;
+            box-shadow: 0 0 40px rgba(168, 85, 247, 0.25);
+            background: linear-gradient(to right, rgba(91, 158, 192, 0.5), rgba(15, 23, 42, 0.8), rgba(249, 128, 0, 0.245));
+            flex-direction: column;
+            .brand{
+                h2{
+                    color: white;
+                    text-shadow: none;
+                    font-size: 2rem;
+                }
+            }
+            h2 {
+                color: #d8b4fe;
+                text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+            }
+
+            .header-controls {
+                display: flex;
+                flex-direction: row;
+                gap: 15;
+                align-items: flex-start;
+                margin-top: 15px;
+            }
+            .export-btn{
+                border: 1px solid #a4a4a4;
+                background: rgba(168, 85, 247, 0.1);
+                box-shadow: 0 0 1px rgba(168, 85, 247, 0.3);
+                color: #e0e7ff;
+                transition: all 0.3s ease   ;
+                span{
+                    transition: all 0.3s ease;
+                }
+                &:hover {
+                    border: 1px solid white;
+                    background: rgba(168, 85, 247, 0.2);
+                    box-shadow: 0 0 15px rgba(168, 85, 247, 0.5);
+                    transition: all 0.3s ease;
+                    span{
+                        transition: all 0.3s ease;
+                        color: white;
+                    }
+                }
+            }
+        }
 
         .brand {
             h2 {
@@ -124,6 +259,16 @@ body {
                 letter-spacing: 1px;
             }
         }
+
+        .header-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+    }
+
+    .main-wrapper {
+        max-width: 90%;
     }
 
     // Search and Sort controls
@@ -176,6 +321,10 @@ body {
     }
 
     // tickets display (Grid and List)
+    .card{
+        padding: 10px;
+        border-radius: 15px;
+    }
     .tickets-container {
         display: grid;
         gap: 15px;
@@ -211,6 +360,9 @@ body {
                         background: rgba($highlight-orange, 0.2);
                         color: $highlight-orange;
                         border: 1px solid $highlight-orange;
+                    }
+                    h3{
+                        margin-left: 15px;
                     }
                 }
             }
@@ -369,7 +521,6 @@ body {
 
 // Overflow container for the charts
 .chart-carousel-container {
-    overflow: hidden;
     position: relative;
     min-height: 400px;
 }
@@ -461,7 +612,13 @@ body {
 }
 
 // Interative chart elements
-
+.chart-section{
+    background: rgba(255,255,255,0.05);
+    border-radius: 16px;
+    padding: 20px;
+    overflow: hidden;
+    height: auto;
+}
 // topchart bars
 .bar-cell-interactive {
     cursor: pointer;
@@ -506,6 +663,8 @@ html {
     justify-content: center;
     align-items: center;
     z-index: 999;
+    border-radius: 16px;
+    margin: 0 20px;
 }
 
 .ai-panel {
@@ -527,24 +686,33 @@ html {
         cursor: pointer;
     }
 
-    .ai-panel-top {
-        text-align: center;
-        margin-bottom: 20px;
+    .ai-header {
+        padding: 20px;
+        border-bottom: 1px solid #334155;
+        display: flex;
+        align-items: center;
+        gap: 15px;
 
         .ai-icon-circle {
-            width: 60px;
-            height: 60px;
-            background: rgba(168, 85, 247, 0.2);
+            background: rgba(139, 92, 246, 0.2);
+            padding: 10px;
             border-radius: 50%;
-            margin: 0 auto 15px;
+            width: 35px;
+            height: 35px;
             display: flex;
             align-items: center;
-            justify-content: center
+            justify-content: center;
         }
 
         h2 {
             color: white;
             margin: 0;
+            font-size: 1.2rem;
+        }
+
+        span {
+            color: #94a3b8;
+            font-size: 0.8rem;
         }
 
         p {
@@ -552,96 +720,139 @@ html {
             margin-top: 10px;
             font-size: 0.9rem;
         }
+
+        button {
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+            transition: all .25s ease;
+
+            &:hover {
+                transition: all .25s ease;
+                color: white;
+            }
+        }
     }
+
     .ai-panel-content {
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 12px;
-        padding: 20px;
-        min-height: 200px;
+        padding: 30px;
+        overflow-y: auto;
         color: #e2e8f0;
-        line-height: 1.6;
-        .ai-loading{
+        line-height: 1.7;
+
+        .ai-loading {
             text-align: center;
             padding: 40px 0;
+
+            .spinner {
+                margin: 0 auto 20px;
+                border-color: #a78bfa;
+                border-right-color: transparent;
+            }
+
+            .animate-pulse {
+                color: #a78bfa;
+            }
         }
     }
 }
+
 // SPRINT SIMULATOR STYLES
-.card{
+.card {
     background: linear-gradient(145deg, #1e293b, #0f172a);
     border: 1px solid #334155;
-    .card-header{
+
+    .card-header {
         display: flex;
         align-items: center;
         gap: 10;
         margin-bottom: 20;
-        h3{
-            margin: 0;
+
+        h3 {
+            margin-left: 5px;
             color: white;
         }
     }
-    .capacity-control{
+
+    .capacity-control {
         margin-bottom: 25;
-        .capacity-label{
+
+        .capacity-label {
             display: flex;
             justify-content: space-between;
             margin-bottom: 10;
-            color: #94a3b8;
-            strong{
+            color: rgb(255, 255, 255);
+            font-size: 0.9rem;
+            margin-top: 5px;
+            font-weight: 500;
+            strong {
                 color: #22c55e;
             }
         }
-        .capacity-slider{
+
+        .capacity-slider {
             width: 100%;
             cursor: pointer;
-            accent-color: #22c55e;
+            accent-color: $highlight-orange;
         }
     }
-    .simulation-results{
+
+    .simulation-results {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 15;
-        .simulation-result-card{
-            background: rgba(255,255,255,0.05);
+
+        .simulation-result-card {
+            background: rgba(255, 255, 255, 0.05);
             padding: 15;
             border-radius: 10;
             text-align: center;
-            .selected-count{
+
+            .selected-count {
                 font-size: 2rem;
                 font-weight: bold;
                 color: white;
             }
-            .result-label{
+
+            .result-label {
                 font-size: 0.8rem;
-                color: #94a3b8;    
+                color: #94a3b8;
             }
-            .total_value{
-                font-size: 2rem;
+            
+            .total-value {
                 font-weight: bold;
-                color: #06b6d4;
-            }
-            .result-value{
+                color: white;
                 font-size: 2rem;
+            }
+            
+            .result-value {
+                font-size: 0.8rem;
                 color: #94a3b8;
             }
         }
     }
-    .selection-details{
+
+    .selection-details {
         margin-top: 20;
         padding-top: 15;
-        border-top: 1px solid rgba(255,255,255,0.1);
-        p{
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+        p {
             font-size: 0.9rem;
             color: #94a3b8;
             display: flex;
             align-items: center;
             gap: 5;
         }
-        .tag-container{
+
+        .tag-container {
             display: flex;
             flex-wrap: wrap;
             gap: 5;
-            span.tag{
+
+            span.tag {
                 background: rgba(34, 197, 94, 0.2);
                 color: #4ade80;
                 font-size: 0.7rem;
@@ -649,12 +860,95 @@ html {
         }
     }
 }
-.export-btn{
-    background: rgba(255,255,255,0.1);
-    border: 1px solid #475569; color: #cbd5e1;
+
+.export-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: #cbd5e1;
     padding: 8px 15px;
     border-radius: 20px;
     cursor: pointer;
     display: flex;
-    gap: 5; 
+    gap: 5;
+}
+
+.markdown-content {
+
+    h1,
+    h2,
+    h3 {
+        color: #f8fafc;
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+
+    strong {
+        color: #38bdf8;
+        font-weight: 700;
+    }
+
+    ul {
+        padding-left: 20px;
+        margin-bottom: 15px;
+    }
+
+    li {
+        margin-bottom: 5px;
+        color: #cbd5e1;
+    }
+
+    p {
+        margin-bottom: 15px;
+        color: #cbd5e1;
+    }
+}
+
+// App.scss
+
+.tooltip-container {
+    position: relative;
+
+    // Oculto por defecto
+    .tooltip-content {
+        visibility: hidden;
+        opacity: 0;
+        width: 200px;
+        background-color: #0f172a;
+        color: #fff;
+        text-align: left;
+        border-radius: 8px;
+        padding: 10px;
+        position: absolute;
+        z-index: 100;
+        bottom: 125%; // Flota encima
+        left: 50%;
+        transform: translateX(-50%);
+        border: 1px solid #334155;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+        transition: opacity 0.3s;
+        font-size: 0.85rem;
+        pointer-events: none; // Para que no moleste al mouse
+
+        // Flechita hacia abajo
+        &::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #334155 transparent transparent transparent;
+        }
+    }
+
+    // Mostrar al Hover
+    &:hover .tooltip-content {
+        visibility: visible;
+        opacity: 1;
+    }
+}
+
+svg:not(:root) {
+    overflow-clip-margin: content-box;
+    overflow: auto !important;
 }

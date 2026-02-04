@@ -1,34 +1,44 @@
-import React, { useEffect, useState, useMemo, useRef } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { fetchTickets } from './services/api';
 import PriorityChart from './components/PriorityChart';
 import TopBarChart from './components/TopBarChart';
-import AIAnalyst from './components/AiAnalysis';         // <--- NUEVO
-import SprintSimulator from './components/SprintSimulator'; // <--- NUEVO
-import html2canvas from 'html2canvas'; // <--- LIBRERÍA PDF
-import jsPDF from 'jspdf';             // <--- LIBRERÍA PDF
+import AIAnalyst from './components/AiAnalysis';
+import SprintSimulator from './components/SprintSimulator';
 
-import { 
-  LayoutGrid, List, Search, ArrowUpDown, 
-  Activity, Database, Shield, Zap, 
+// Librerías para PDF Híbrido
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import html2canvas from 'html2canvas';
+
+import {
+  LayoutGrid, List, Search, ArrowUpDown,
+  Activity, Database, Shield, Zap,
   BarChart2, TrendingUp, AlertTriangle, Clock, Download
-} from 'lucide-react'; 
+} from 'lucide-react';
 import './App.scss';
 
 function App() {
+  // --- STATE MANAGEMENT ---
   const [screen, setScreen] = useState('welcome');
   const [tickets, setTickets] = useState([]);
   const [selectedTicketId, setSelectedTicketId] = useState(null);
+
+  // Interactivity
   const [searchQuery, setSearchQuery] = useState('');
   const [sortConfig, setSortConfig] = useState({ key: 'score', direction: 'desc' });
   const [viewMode, setViewMode] = useState('grid');
+
+  // Carousel & Animation
   const [chartView, setChartView] = useState('matrix');
   const [isAnimating, setIsAnimating] = useState(false);
 
-  // REFERENCIA PARA EL PDF (Capturaremos todo lo que esté dentro de este ref)
-  const dashboardRef = useRef(null);
+  // PDF Data
+  const [aiReportText, setAiReportText] = useState("");
+  const [isAIActive, setIsAIActive] = useState(false);
 
+  // --- LIFECYCLE ---
   useEffect(() => {
-    // Initial load logic if needed
+    // Preload logic if needed
   }, []);
 
   const handleStart = async () => {
@@ -44,42 +54,129 @@ function App() {
     }, 1500);
   };
 
-  // --- PDF EXPORT FUNCTION ---
+  // --- HYBRID PDF EXPORT FUNCTION ---
   const handleExportPDF = async () => {
-    if (!dashboardRef.current) return;
-    
-    // Feedback visual simple
     const btn = document.getElementById('export-btn');
-    if(btn) btn.innerText = 'Generating...';
+    if (btn) btn.innerText = 'Generating...';
 
     try {
-      const canvas = await html2canvas(dashboardRef.current, {
-        scale: 2, // Mejor resolución
-        backgroundColor: '#0f172a', // Asegurar fondo oscuro
-        useCORS: true
+      const doc = new jsPDF();
+      const today = new Date().toLocaleDateString();
+
+      // 1. HEADER (Vectorial)
+      doc.setFillColor(15, 23, 42); // Azul Oscuro
+      doc.rect(0, 0, 210, 40, 'F');
+
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(22);
+      doc.text("CloudAppX", 14, 20);
+
+      doc.setFontSize(12);
+      doc.setTextColor(148, 163, 184);
+      doc.text(`Strategic Technical Debt Report | ${today}`, 14, 30);
+
+      let yPos = 50;
+
+      // 2. AI SUMMARY (Vectorial)
+      if (aiReportText) {
+        doc.setTextColor(0, 0, 0);
+        doc.setFontSize(14);
+        doc.text("Executive AI Summary", 14, yPos);
+        yPos += 8;
+
+        doc.setFontSize(10);
+        doc.setTextColor(51, 65, 85);
+        // const cleanText = aiReportText.replace(/\*\*/g, ''); // Limpiar markdown básico
+        const splitText = doc.splitTextToSize(aiReportText, 180);
+        doc.text(splitText, 14, yPos);
+
+        yPos += (splitText.length * 5) + 10;
+      }
+
+      // 3. CHART SNAPSHOT (Imagen)
+      // Capturamos SOLO el div del gráfico
+      const chartElement = document.getElementById('chart-capture-zone');
+      if (chartElement) {
+        doc.setFontSize(14);
+        doc.setTextColor(0, 0, 0);
+        doc.text("Current Visualization Snapshot", 14, yPos);
+        yPos += 5;
+
+        // Usamos html2canvas solo en esta zona
+        const canvas = await html2canvas(chartElement, {
+          scale: 2, // Alta resolución
+          backgroundColor: '#0f172a', // Mantener fondo oscuro
+          useCORS: true
+        });
+
+        const imgData = canvas.toDataURL('image/png');
+
+        // Ajustamos la imagen al ancho del PDF (A4 = 210mm ancho)
+        // Margen 14mm, Ancho util ~180mm. Altura proporcional.
+        const imgProps = doc.getImageProperties(imgData);
+        const pdfWidth = 180;
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+        // Si la imagen no cabe en la página, añadimos una nueva
+        if (yPos + pdfHeight > 280) {
+          doc.addPage();
+          yPos = 20;
+        }
+
+        doc.addImage(imgData, 'PNG', 14, yPos, pdfWidth, pdfHeight);
+        yPos += pdfHeight + 15;
+      }
+
+      // 4. CRITICAL RISKS TABLE (Vectorial - AutoTable)
+      if (yPos > 240) { doc.addPage(); yPos = 20; }
+
+      doc.setFontSize(14);
+      doc.setTextColor(220, 38, 38);
+      doc.text("Top Critical Risks", 14, yPos);
+      yPos += 5;
+
+      const criticalData = [...tickets].sort((a, b) => b.score - a.score).slice(0, 5);
+
+      autoTable(doc, {
+        startY: yPos,
+        head: [['ID', 'Title', 'Module', 'Severity', 'Value', 'Effort (h)', 'Score']],
+        body: criticalData.map(t => [t.id, t.title, t.module, t.severity, t.business_value, t.effort_hours, t.score]),
+        theme: 'grid',
+        headStyles: { fillColor: [220, 38, 38] },
       });
-      
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-      
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`CloudAppX_Strategic_Report_${new Date().toISOString().slice(0,10)}.pdf`);
+
+      yPos = doc.lastAutoTable.finalY + 15;
+
+      // 5. FULL BACKLOG (Vectorial)
+      doc.setFontSize(14);
+      doc.setTextColor(0, 0, 0);
+      doc.text("Prioritized Backlog", 14, yPos);
+
+      autoTable(doc, {
+        startY: yPos + 5,
+        head: [['ID', 'Title', 'Module', 'Value','Effort (h)', 'Score']],
+        body: tickets.map(t => [t.id, t.title, t.module, t.business_value, t.effort_hours, t.score]),
+        theme: 'striped',
+        headStyles: { fillColor: [15, 23, 42] },
+      });
+
+      doc.save('CloudAppX_Master_Report.pdf');
+
     } catch (err) {
-      console.error("PDF Failed", err);
+      console.error("PDF Gen Failed", err);
     } finally {
-      if(btn) btn.innerHTML = '<span class="flex gap-2 items-center">Download Report</span>';
+      if (btn) btn.innerHTML = '<span class="flex gap-2">Download PDF</span>';
     }
   };
 
+  // --- CHART LOGIC ---
   const changeChartView = (newView) => {
     if (newView === chartView) return;
     setIsAnimating(true);
     setTimeout(() => {
       setChartView(newView);
       setIsAnimating(false);
-    }, 400); 
+    }, 400);
   };
 
   const handleTicketClick = (id) => {
@@ -88,10 +185,10 @@ function App() {
     if (element) element.scrollIntoView({ behavior: 'smooth', block: 'center' });
   };
 
-  // --- DATA LOGIC ---
-  const topCritical = useMemo(() => [...tickets].sort((a,b) => b.score - a.score).slice(0, 5), [tickets]);
-  const topROI = useMemo(() => [...tickets].sort((a,b) => b.business_value - a.business_value).slice(0, 5), [tickets]);
-  const topQuickWins = useMemo(() => [...tickets].filter(t => t.business_value >= 3).sort((a,b) => a.effort_hours - b.effort_hours).slice(0, 5), [tickets]);
+  // Data processing
+  const topCritical = useMemo(() => [...tickets].sort((a, b) => b.score - a.score).slice(0, 5), [tickets]);
+  const topROI = useMemo(() => [...tickets].sort((a, b) => b.business_value - a.business_value).slice(0, 5), [tickets]);
+  const topQuickWins = useMemo(() => [...tickets].filter(t => t.business_value >= 3).sort((a, b) => a.effort_hours - b.effort_hours).slice(0, 5), [tickets]);
 
   const processedTickets = useMemo(() => {
     let result = [...tickets];
@@ -114,7 +211,7 @@ function App() {
   };
 
   const renderActiveChart = () => {
-    switch(chartView) {
+    switch (chartView) {
       case 'matrix': return <PriorityChart tickets={tickets} selectedId={selectedTicketId} onTicketClick={handleTicketClick} />;
       case 'critical': return <TopBarChart data={topCritical} title="Top 5 Critical Threats" dataKey="score" label="Score" color="#f97316" onTicketClick={handleTicketClick} />;
       case 'roi': return <TopBarChart data={topROI} title="Top 5 High ROI Opportunities" dataKey="business_value" label="Value" color="#06b6d4" onTicketClick={handleTicketClick} />;
@@ -123,14 +220,14 @@ function App() {
     }
   };
 
-  // --- SCREENS ---
+  // --- VIEWS ---
   if (screen === 'welcome') {
     return (
       <div className="app-container">
         <div className="welcome-screen">
           <div style={{ marginBottom: 20 }}><Zap size={60} color="#f97316" /></div>
           <h1>CloudAppX</h1>
-          <p>Technical Debt Prioritization System v3.0 (AI Enabled)</p>
+          <p>Technical Debt Prioritization System v3.0</p>
           <button className="start-btn" onClick={handleStart}>Initialize System</button>
         </div>
       </div>
@@ -143,7 +240,7 @@ function App() {
         <div className="loading-screen">
           <div className="spinner"></div>
           <h2>Initializing AI Core...</h2>
-          <p style={{color: '#94a3b8'}}>Connecting to Google Gemini Engine...</p>
+          <p style={{ color: '#94a3b8' }}>Connecting to Google Gemini Engine...</p>
         </div>
       </div>
     );
@@ -151,33 +248,28 @@ function App() {
 
   return (
     <div className="app-container" style={{ alignItems: 'flex-start' }}>
-      
-      {/* WRAPPER FOR PDF CAPTURE */}
-      <div className="dashboard-container" ref={dashboardRef}>
-        
+      <div className="dashboard-container">
+
         {/* HEADER */}
-        <header>
+        <header className={isAIActive ? 'header-ai-mode' : ''}>
           <div className="brand">
             <h2>CloudAppX Monitor</h2>
             <span>DECISION SUPPORT SYSTEM</span>
           </div>
-          <div style={{ display: 'flex', gap: 15, alignItems: 'center' }}>
-            {/* COMPONENTE AI */}
-            <AIAnalyst />
-            
-            {/* BOTÓN PDF */}
-            <button id="export-btn" onClick={handleExportPDF} className="export-btn" style={{ 
-              background: 'rgba(255,255,255,0.1)', border: '1px solid #475569', color: '#cbd5e1', 
-              padding: '8px 15px', borderRadius: '20px', cursor: 'pointer', display: 'flex', gap: 5 
+          <div className="header-controls">
+            <AIAnalyst onReportGenerated={setAiReportText} onStateChange={setIsAIActive}/>
+            <button id="export-btn" onClick={handleExportPDF} className="export-btn" style={{
+              background: 'rgba(255,255,255,0.1)', border: '1px solid #475569', color: '#cbd5e1',
+              padding: '8px 15px', borderRadius: '20px', cursor: 'pointer', display: 'flex', gap: 5, alignItems: 'center'
             }}>
               <Download size={16} /> Export PDF
             </button>
           </div>
         </header>
+        <div className='main-wrapper'>
+          {/* --- MAIN GRID LAYOUT --- */}
+          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 30, marginBottom: 30 }}>
 
-        {/* --- MAIN GRID LAYOUT --- */}
-        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 30, marginBottom: 30 }}>
-            
             {/* LEFT COLUMN: CHARTS */}
             <div>
               <div className="chart-tabs">
@@ -187,7 +279,8 @@ function App() {
                 <button className={`success ${chartView === 'quick' ? 'active' : ''}`} onClick={() => changeChartView('quick')}><Clock size={18} /> Quick Wins</button>
               </div>
 
-              <section className="chart-section" style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 16, padding: 20, overflow: 'hidden', height: 400 }}>
+              {/* ID AÑADIDO AQUI PARA LA CAPTURA PDF */}
+              <section id="chart-capture-zone" className="chart-section" >
                 <div className={`chart-carousel-container ${isAnimating ? 'slide-exit' : 'slide-enter'}`}>
                   {renderActiveChart()}
                 </div>
@@ -196,55 +289,55 @@ function App() {
 
             {/* RIGHT COLUMN: SIMULATOR */}
             <div>
-              {/* COMPONENTE SIMULADOR */}
               <SprintSimulator tickets={tickets} />
             </div>
-        </div>
-
-        {/* CONTROLS BAR */}
-        <div className="controls-bar">
-          <div className="search-box">
-            <Search className="search-icon" size={18} />
-            <input type="text" placeholder="Search tickets..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
           </div>
-          <button className={`filter-btn ${sortConfig.key === 'score' ? 'active' : ''}`} onClick={() => requestSort('score')}><BarChart2 size={16} /> Sort Score</button>
-          <button className={`filter-btn ${sortConfig.key === 'business_value' ? 'active' : ''}`} onClick={() => requestSort('business_value')}><ArrowUpDown size={16} /> Sort Value</button>
-          <div style={{ marginLeft: 'auto', display: 'flex', gap: 10 }}>
-            <button className={`view-toggle-btn ${viewMode === 'grid' ? 'active' : ''}`} onClick={() => setViewMode('grid')}><LayoutGrid size={18} /></button>
-            <button className={`view-toggle-btn ${viewMode === 'list' ? 'active' : ''}`} onClick={() => setViewMode('list')}><List size={18} /></button>
-          </div>
-        </div>
 
-        {/* TICKETS DISPLAY */}
-        <div className={`tickets-container ${viewMode === 'list' ? 'list-view' : 'grid-view'}`}>
-          {processedTickets.map((ticket) => (
-            <div 
-              key={ticket.id} 
-              id={ticket.id} 
-              className={`ticket-card ${selectedTicketId === ticket.id ? 'is-selected' : ''}`}
-              onClick={() => handleTicketClick(ticket.id)}
-              style={{ cursor: 'pointer' }}
-            >
-              <div className="card-header">
-                <div>
-                  <h4 style={{ margin: 0, color: '#94a3b8' }}>{ticket.id}</h4>
-                  <span className="tag" style={{ background: 'rgba(255,255,255,0.1)', marginTop: 5, display: 'inline-block' }}>{ticket.module}</span>
-                </div>
-                <div className="score-circle">{ticket.score}</div>
-              </div>
-              <div className="card-body">
-                <h3 style={{ margin: '10px 0', fontSize: '1.1rem' }}>{ticket.title}</h3>
-              </div>
-              <div className="card-footer" style={{ marginTop: 15, fontSize: '0.9rem', color: '#cbd5e1', display: 'flex', gap: 15 }}>
-                 <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}><Shield size={14} color={ticket.severity >= 4 ? '#ef4444' : '#22c55e'} /> Sev: {ticket.severity}</div>
-                 <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}><Database size={14} color="#f97316" /> Val: {ticket.business_value}</div>
-                 <div>⏱ {ticket.effort_hours}h</div>
-              </div>
+          {/* CONTROLS BAR */}
+          <div className="controls-bar">
+            <div className="search-box">
+              <Search className="search-icon" size={18} />
+              <input type="text" placeholder="Search tickets..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
             </div>
-          ))}
-          {processedTickets.length === 0 && <div style={{ padding: 40, textAlign: 'center', color: '#94a3b8', gridColumn: '1 / -1' }}>No tickets found matching your criteria.</div>}
-        </div>
+            <button className={`filter-btn ${sortConfig.key === 'score' ? 'active' : ''}`} onClick={() => requestSort('score')}><BarChart2 size={16} /> Sort Score</button>
+            <button className={`filter-btn ${sortConfig.key === 'business_value' ? 'active' : ''}`} onClick={() => requestSort('business_value')}><ArrowUpDown size={16} /> Sort Value</button>
+            <div style={{ marginLeft: 'auto', display: 'flex', gap: 10 }}>
+              <button className={`view-toggle-btn ${viewMode === 'grid' ? 'active' : ''}`} onClick={() => setViewMode('grid')}><LayoutGrid size={18} /></button>
+              <button className={`view-toggle-btn ${viewMode === 'list' ? 'active' : ''}`} onClick={() => setViewMode('list')}><List size={18} /></button>
+            </div>
+          </div>
 
+          {/* TICKETS DISPLAY */}
+          <div className={`tickets-container ${viewMode === 'list' ? 'list-view' : 'grid-view'}`}>
+            {processedTickets.map((ticket) => (
+              <div
+                key={ticket.id}
+                id={ticket.id}
+                className={`ticket-card ${selectedTicketId === ticket.id ? 'is-selected' : ''}`}
+                onClick={() => handleTicketClick(ticket.id)}
+                style={{ cursor: 'pointer' }}
+              >
+                <div className="card-header">
+                  <div>
+                    <h4 style={{ margin: 0, color: '#94a3b8' }}>{ticket.id}</h4>
+                    <span className="tag" style={{ background: 'rgba(255,255,255,0.1)', marginTop: 5, display: 'inline-block' }}>{ticket.module}</span>
+                  </div>
+                  <div className="score-circle">{ticket.score}</div>
+                </div>
+                <div className="card-body">
+                  <h3 style={{ margin: '10px 0', fontSize: '1.1rem' }}>{ticket.title}</h3>
+                </div>
+                <div className="card-footer" style={{ marginTop: 15, fontSize: '0.9rem', color: '#cbd5e1', display: 'flex', gap: 15 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}><Shield size={14} color={ticket.severity >= 4 ? '#ef4444' : '#22c55e'} /> Sev: {ticket.severity}</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}><Database size={14} color="#f97316" /> Val: {ticket.business_value}</div>
+                  <div>⏱ {ticket.effort_hours}h</div>
+                </div>
+              </div>
+            ))}
+            {processedTickets.length === 0 && <div style={{ padding: 40, textAlign: 'center', color: '#94a3b8', gridColumn: '1 / -1' }}>No tickets found matching your criteria.</div>}
+          </div>
+
+        </div>
       </div>
     </div>
   );

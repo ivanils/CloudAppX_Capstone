@@ -1,25 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Bot, FileText, Sparkles, X } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 
-const AiAnalyst = () => {
+const AiAnalyst = ({ onReportGenerated, onStateChange }) => {
     const [loading, setLoading] = useState(false);
     const [report, setReport] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
+
+    useEffect(() => {
+    if (onStateChange) {
+      onStateChange(isOpen);
+    }
+  }, [isOpen, onStateChange]);
 
     const generateReport = async () => {
         setLoading(true);
         setIsOpen(true);
         try {
             const response = await axios.post('http://127.0.0.1:8000/api/analyze', {});
-            setReport(response.data.analysis);
+            const text = response.data.analysis;
+            setReport(text);
+
+            if (onReportGenerated) {
+                onReportGenerated(text);
+            }
         } catch (error) {
             setReport(`Error generating report. Please try again. Error: ${error.message}`);
         } finally {
             setLoading(false);
         }
     }
+
+    
+
     if (!isOpen) {
         return (
             <button
@@ -37,23 +51,33 @@ const AiAnalyst = () => {
                         <X size={24} />
                     </button>
 
-                    <div className="ai-panel-top">
-                        <div className="ai-icon-circle">
-                            <Bot size={32} color="#a855f7" />
+                    {/* Header */}
+                    <div className="ai-header" >
+                        <div className="ai-icon-circle" >
+                            <Bot size={24} color="#a78bfa" />
                         </div>
-                        <h2>AI Strategic Analysis</h2>
-                        <p>Powered by Google Gemini Pro</p>
+                        <div>
+                            <h2>AI Strategic Analysis</h2>
+                            <span>Powered by Google Gemini 1.5</span>
+                        </div>
+                        <button
+                            onClick={() => setIsOpen(false)}
+                        >
+                            <X size={24} />
+                        </button>
                     </div>
 
+                    {/* Content Area con Scroll */}
                     <div className="ai-panel-content">
                         {loading ? (
                             <div className="ai-loading">
-                                <div className="spinner" style={{ margin: '0 auto 15px' }}></div>
-                                <p className="animate-pulse">Analyzing technical debt patterns...</p>
+                                <div className="spinner"></div>
+                                <p className="animate-pulse">Analyzing data points...</p>
                             </div>
                         ) : (
+                            // AQUI ESTA LA MAGIA DEL MARKDOWN
                             <div className="markdown-content">
-                                <div style={{ whiteSpace: 'pre-line' }}>{report}</div>
+                                <ReactMarkdown>{report}</ReactMarkdown>
                             </div>
                         )}
                     </div>

@@ -72,16 +72,17 @@ async def analyze_ticket():
             for t in tickets[:10]
         ])
         prompt = f"""
-        You are an expert software project manager. You are analyzing the current technical debt of CloudAppX, which is an Saas company.
+        You are an expert software project manager. You are analyzing the current technical debt of CloudAppX, which is a Saas company.
         Given the following technical debt ticket:
         {tickets_summary}
         
-        Based on this data, provide a strictly professional executive summary (max 150 words) covering:
+        Based on this data, provide a strictly professional executive summary (max 500 words) covering:
         1. The most critical risk detected.
         2. A strategic recommendation for the next sprint.
         3. The potential business impact if ignored.
         
-        Format the response in Markdown with bold headers. Be direct and concise.
+        Provide the analysis in the most professional tone possible, using markdown formatting with headings and bullet points for clarity.
+        ️Make sure to highlight key points using bold text where appropriate.
         
         """
         # Gemini Call
