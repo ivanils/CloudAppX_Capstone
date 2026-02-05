@@ -4,6 +4,7 @@ import PriorityChart from './components/PriorityChart';
 import TopBarChart from './components/TopBarChart';
 import AIAnalyst from './components/AiAnalysis';
 import SprintSimulator from './components/SprintSimulator';
+import { toast } from 'sonner';
 
 // Librerías para PDF Híbrido
 import jsPDF from 'jspdf';
@@ -154,16 +155,18 @@ function App() {
 
       autoTable(doc, {
         startY: yPos + 5,
-        head: [['ID', 'Title', 'Module', 'Value','Effort (h)', 'Score']],
+        head: [['ID', 'Title', 'Module', 'Value', 'Effort (h)', 'Score']],
         body: tickets.map(t => [t.id, t.title, t.module, t.business_value, t.effort_hours, t.score]),
         theme: 'striped',
         headStyles: { fillColor: [15, 23, 42] },
       });
 
       doc.save('CloudAppX_Master_Report.pdf');
+      toast.success('Executive Report Generated successfully!');
 
     } catch (err) {
       console.error("PDF Gen Failed", err);
+      toast.error('Failed to generate PDF.');
     } finally {
       if (btn) btn.innerHTML = '<span class="flex gap-2">Download PDF</span>';
     }
@@ -220,6 +223,13 @@ function App() {
     }
   };
 
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat('en-AU', {
+      style: 'currency',
+      currency: 'AUD',
+      maximumFractionDigits: 0,
+    }).format(value * 1000);
+  };
   // --- VIEWS ---
   if (screen === 'welcome') {
     return (
@@ -240,7 +250,11 @@ function App() {
         <div className="loading-screen">
           <div className="spinner"></div>
           <h2>Initializing AI Core...</h2>
-          <p style={{ color: '#94a3b8' }}>Connecting to Google Gemini Engine...</p>
+          <span style={{ color: '#94a3b8', display: 'flex', alignItems: 'center', gap: 5 }}>
+            Connecting to
+            <img className="gemini-icon" src="https://favicon.im/gemini.google.com" alt="gemini.google.com favicon" />
+            Google Gemini Engine...
+          </span>
         </div>
       </div>
     );
@@ -248,8 +262,9 @@ function App() {
 
   return (
     <div className="app-container" style={{ alignItems: 'flex-start' }}>
-      <div className="dashboard-container">
 
+      <div className="mesh-bg"></div>
+      <div className="dashboard-container">
         {/* HEADER */}
         <header className={isAIActive ? 'header-ai-mode' : ''}>
           <div className="brand">
@@ -257,7 +272,7 @@ function App() {
             <span>DECISION SUPPORT SYSTEM</span>
           </div>
           <div className="header-controls">
-            <AIAnalyst onReportGenerated={setAiReportText} onStateChange={setIsAIActive}/>
+            <AIAnalyst onReportGenerated={setAiReportText} onStateChange={setIsAIActive} />
             <button id="export-btn" onClick={handleExportPDF} className="export-btn" style={{
               background: 'rgba(255,255,255,0.1)', border: '1px solid #475569', color: '#cbd5e1',
               padding: '8px 15px', borderRadius: '20px', cursor: 'pointer', display: 'flex', gap: 5, alignItems: 'center'
@@ -268,7 +283,7 @@ function App() {
         </header>
         <div className='main-wrapper'>
           {/* --- MAIN GRID LAYOUT --- */}
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 30, marginBottom: 30 }}>
+          <div className='main-grid-layout'>
 
             {/* LEFT COLUMN: CHARTS */}
             <div>
@@ -329,7 +344,7 @@ function App() {
                 </div>
                 <div className="card-footer" style={{ marginTop: 15, fontSize: '0.9rem', color: '#cbd5e1', display: 'flex', gap: 15 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}><Shield size={14} color={ticket.severity >= 4 ? '#ef4444' : '#22c55e'} /> Sev: {ticket.severity}</div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}><Database size={14} color="#f97316" /> Val: {ticket.business_value}</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}><Database size={14} color="#f97316" /> Val: {formatCurrency(ticket.business_value)}</div>
                   <div>⏱ {ticket.effort_hours}h</div>
                 </div>
               </div>

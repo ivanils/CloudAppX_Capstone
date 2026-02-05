@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Bot, FileText, Sparkles, X } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import { toast } from "sonner";
 
 const AiAnalyst = ({ onReportGenerated, onStateChange }) => {
     const [loading, setLoading] = useState(false);
@@ -9,10 +10,10 @@ const AiAnalyst = ({ onReportGenerated, onStateChange }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
-    if (onStateChange) {
-      onStateChange(isOpen);
-    }
-  }, [isOpen, onStateChange]);
+        if (onStateChange) {
+            onStateChange(isOpen);
+        }
+    }, [isOpen, onStateChange]);
 
     const generateReport = async () => {
         setLoading(true);
@@ -25,6 +26,8 @@ const AiAnalyst = ({ onReportGenerated, onStateChange }) => {
             if (onReportGenerated) {
                 onReportGenerated(text);
             }
+
+            toast.info('AI Analysis completed.');
         } catch (error) {
             setReport(`Error generating report. Please try again. Error: ${error.message}`);
         } finally {
@@ -32,7 +35,7 @@ const AiAnalyst = ({ onReportGenerated, onStateChange }) => {
         }
     }
 
-    
+
 
     if (!isOpen) {
         return (
@@ -58,7 +61,9 @@ const AiAnalyst = ({ onReportGenerated, onStateChange }) => {
                         </div>
                         <div>
                             <h2>AI Strategic Analysis</h2>
-                            <span>Powered by Google Gemini 1.5</span>
+                            <span>Powered by Google Gemini
+                                <img className="gemini-icon" src="https://favicon.im/gemini.google.com" alt="gemini.google.com favicon" />
+                            </span>
                         </div>
                         <button
                             onClick={() => setIsOpen(false)}
@@ -85,6 +90,7 @@ const AiAnalyst = ({ onReportGenerated, onStateChange }) => {
             </div>
         );
     }
+
 }
 
 export default AiAnalyst;

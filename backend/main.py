@@ -1,5 +1,6 @@
 import os
 
+from dotenv import load_dotenv
 from google import genai
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -7,10 +8,14 @@ from logic import get_prioritized_tickets
 from pydantic import BaseModel
 from typing import List
 
-# GEMINI API KEY setup
-GEMINI_API_KEY = "AIzaSyCiJ1AEJX8QZ4wCTJWrqVQjljFlfzQBGwI"
-client = genai.Client(api_key=GEMINI_API_KEY)
 
+load_dotenv()
+# GEMINI API KEY setup
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+if not GEMINI_API_KEY:
+    raise ValueError("❌ Error Crítico: No se encontró la GEMINI_API_KEY en el archivo .env")
+
+client = genai.Client(api_key=GEMINI_API_KEY)
 
 # To get the updated list of models available
 # print("Listing available models...")
