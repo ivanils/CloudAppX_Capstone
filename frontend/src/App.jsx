@@ -235,7 +235,7 @@ function App() {
     return (
       <div className="app-container">
         <div className="welcome-screen">
-          <div style={{ marginBottom: 20 }}><Zap size={60} color="#f97316" /></div>
+          <div style={{ marginBottom: 20 }}><img alt='infinity logo' src="/src/assets/infinity_logo.png" style={{ maxWidth: '75px', height: 'auto' }}/></div>
           <h1>CloudAppX</h1>
           <p>Technical Debt Prioritization System v3.0</p>
           <button className="start-btn" onClick={handleStart}>Initialize System</button>
@@ -286,7 +286,7 @@ function App() {
           <div className='main-grid-layout'>
 
             {/* LEFT COLUMN: CHARTS */}
-            <div>
+            <div className='main-grid-left'>
               <div className="chart-tabs">
                 <button className={chartView === 'matrix' ? 'active' : ''} onClick={() => changeChartView('matrix')}><Activity size={18} /> Strategic Matrix</button>
                 <button className={`danger ${chartView === 'critical' ? 'active' : ''}`} onClick={() => changeChartView('critical')}><AlertTriangle size={18} /> Critical Risks</button>
@@ -303,7 +303,7 @@ function App() {
             </div>
 
             {/* RIGHT COLUMN: SIMULATOR */}
-            <div>
+            <div className='main-grid-right'>
               <SprintSimulator tickets={tickets} />
             </div>
           </div>

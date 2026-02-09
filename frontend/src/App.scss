@@ -88,29 +88,44 @@ body {
     color: #f8fafc;
     background: radial-gradient(circle at 50% 0%, #413e4f 0%, #171736 20%);
 }
+
 .mesh-bg {
-  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0;
-  background-color: #0f172a;
-  
-  // Creamos 3 focos de color gigantes
-  background-image: 
-    radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
-    radial-gradient(at 50% 0%, rgb(75, 47, 106) 0, transparent 50%), 
-    radial-gradient(at 100% 75%, rgba(39, 106, 114, 0.658) 0, transparent 50%);
-    
-  // Animación sutil de color
-  &::after {
-    content: "";
-    position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-    background: radial-gradient(circle, rgba(76, 29, 149, 0.4) 0%, transparent 60%);
-    filter: blur(80px);
-    animation: meshMove 10s infinite alternate linear;
-  }
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    background-color: #0f172a;
+
+    // Creamos 3 focos de color gigantes
+    background-image:
+        radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
+        radial-gradient(at 50% 0%, rgb(75, 47, 106) 0, transparent 50%),
+        radial-gradient(at 100% 75%, rgba(39, 106, 114, 0.658) 0, transparent 50%);
+
+    // Animación sutil de color
+    &::after {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(76, 29, 149, 0.4) 0%, transparent 60%);
+        filter: blur(80px);
+        animation: meshMove 10s infinite alternate linear;
+    }
 }
 
 @keyframes meshMove {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(500px, 1000px); }
+    0% {
+        transform: translate(0, 0);
+    }
+
+    100% {
+        transform: translate(500px, 1000px);
+    }
 }
 
 // Mixins
@@ -151,6 +166,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    padding-bottom: 25px;
 }
 
 // Different screens styles
@@ -249,9 +265,9 @@ body {
 
             .header-controls {
                 display: flex;
-                flex-direction: row;
+                flex-direction: column-reverse;
                 gap: 15;
-                align-items: flex-start;
+                align-items: center;
                 margin-top: 15px;
                 justify-content: center;
 
@@ -320,10 +336,20 @@ body {
         max-width: 90%;
 
         .main-grid-layout {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 30px;
+            display: flex;
+            flex-direction: row;
+            align-content: space-between;
+            justify-content: space-between;
             margin-bottom: 30px;
+            width: 100%;
+
+            .main-grid-left {
+                width: 49%;
+            }
+            .main-grid-right {
+                width: 550px;
+            }
+            
         }
     }
 
@@ -848,6 +874,9 @@ html {
 }
 
 // SPRINT SIMULATOR STYLES
+
+
+
 .card {
     background: linear-gradient(145deg, #1e293b, #0f172a);
     border: 1px solid #334155;
