@@ -13,7 +13,7 @@ load_dotenv()
 # GEMINI API KEY setup
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 if not GEMINI_API_KEY:
-    raise ValueError("❌ Error Crítico: No se encontró la GEMINI_API_KEY en el archivo .env")
+    raise ValueError("Error: GEMINI_API_KEY not found in file .env")
 
 client = genai.Client(api_key=GEMINI_API_KEY)
 
@@ -92,7 +92,7 @@ async def analyze_ticket():
         """
         # Gemini Call
         response = client.models.generate_content(
-            model="gemini-2.0-flash-001",
+            model="gemini-2.5-flash",
             contents=prompt
         )
         return {"analysis": response.text}
@@ -100,7 +100,6 @@ async def analyze_ticket():
     except Exception as e:
         print(f"Error during ticket analysis: {e}")
         fallback_report = """
-        ### ⚠️ AI Connectivity Issue (Offline Mode)
 
         **Critical Risk Analysis:**
         Based on the metadata, the **SQL Injection vulnerability (TIC-019)** is the highest priority threat. It exposes the entire database to unauthorized access, carrying a severity score of 5/5.

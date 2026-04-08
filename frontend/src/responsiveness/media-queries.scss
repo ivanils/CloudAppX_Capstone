@@ -1,0 +1,24 @@
+@media screen and (max-width: 1290px) {
+    .dashboard-container .main-wrapper {
+        max-width: 100%;
+    }
+}
+
+@media screen and (max-width: 1290px) {
+    .dashboard-container .main-wrapper .main-grid-layout{
+        flex-direction: column-reverse;
+        .main-grid-left, .main-grid-right{
+            width: 100%;
+        }
+        .main-grid-right{
+            margin-bottom: 20px;
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
