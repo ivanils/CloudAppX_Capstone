@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 // base url of the fastapi backend )
-const API_URL = 'http://127.0.0.1:8000';
+const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+export default API_URL;
 
 // Fetches the prioritized tickets from the API.
 export const fetchTickets = async () => {

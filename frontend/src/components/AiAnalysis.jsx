@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import { toast } from "sonner";
 import { Quantum } from 'ldrs/react'
 import 'ldrs/react/Quantum.css'
+import API_URL from "../services/api";
 
 
 const AiAnalyst = ({ onReportGenerated, onStateChange }) => {
@@ -22,7 +23,7 @@ const AiAnalyst = ({ onReportGenerated, onStateChange }) => {
         setLoading(true);
         setIsOpen(true);
         try {
-            const response = await axios.post('http://127.0.0.1:8000/api/analyze', {});
+            const response = await axios.post(`${API_URL}/api/analyze`, {});
             const text = response.data.analysis;
             setReport(text);
 
@@ -79,7 +80,7 @@ const AiAnalyst = ({ onReportGenerated, onStateChange }) => {
                     <div className="ai-panel-content">
                         {loading ? (
                             <div className="ai-loading">
-                                <Quantum size="65" speed="3.75" color="white"/>
+                                <Quantum size="65" speed="3.75" color="white" />
                                 <p className="animate-pulse">Analyzing data points... </p>
                             </div>
                         ) : (
