@@ -30,10 +30,14 @@ app = FastAPI(
 )
 
 # CORS configuration (for the communication between the front and the backend)
-
+origins = [
+    "http://localhost:5173", # Para que puedas seguir programando en tu casa
+    "https://cloud-app-x-capstone.vercel.app", # Tu URL por defecto de Vercel
+    "https://cloudappx.ivanllanos.com" # Tu dominio profesional final
+]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

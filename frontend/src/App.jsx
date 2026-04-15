@@ -5,6 +5,7 @@ import TopBarChart from './components/TopBarChart';
 import AIAnalyst from './components/AiAnalysis';
 import SprintSimulator from './components/SprintSimulator';
 import { toast } from 'sonner';
+import infinityLogo from '../assets/infinity_logo.png';
 
 // Librerías para PDF Híbrido
 import jsPDF from 'jspdf';
@@ -39,19 +40,31 @@ function App() {
 
   // --- LIFECYCLE ---
   useEffect(() => {
-    // Preload logic if needed
+    const prefetchData = async () => {
+      try {
+        const data = await fetchTickets();
+        setTickets(data); 
+      } catch (error) {
+        console.error("Waking up server error:", error);
+      }
+    };
+
+    prefetchData();
   }, []);
 
   const handleStart = async () => {
     setScreen('loading');
-    setTimeout(async () => {
-      try {
-        const data = await fetchTickets();
-        setTickets(data);
-        setScreen('dashboard');
-      } catch (error) {
-        console.error("Error booting system", error);
-      }
+    // setTimeout(async () => {
+    //   try {
+    //     const data = await fetchTickets();
+    //     setTickets(data);
+    //     setScreen('dashboard');
+    //   } catch (error) {
+    //     console.error("Error booting system", error);
+    //   }
+    // }, 1500);
+    setTimeout(() => {
+      setScreen('dashboard');
     }, 1500);
   };
 
@@ -81,7 +94,7 @@ function App() {
       // 2. AI SUMMARY 
       if (aiReportText) {
         const primaryColor = [54, 105, 199]; // #3669c7 
-        const textColor = [51, 65, 85];    
+        const textColor = [51, 65, 85];
         const pageHeight = doc.internal.pageSize.getHeight();
 
         // sec title
@@ -110,7 +123,7 @@ function App() {
             doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
             currentText = currentText.replace(/^##\s/, '');
             isTitle = true;
-          } 
+          }
           else if (currentText.startsWith('### ')) {
             doc.setFontSize(12);
             doc.setFont("helvetica", "bold");
@@ -125,7 +138,7 @@ function App() {
             doc.setTextColor(textColor[0], textColor[1], textColor[2]);
             indent = currentText.startsWith('  ') ? 22 : 18;
             currentText = currentText.trim().replace(/^[-]\s/, '•  ');
-          } 
+          }
           // regular text
           else {
             doc.setFontSize(10);
@@ -135,7 +148,7 @@ function App() {
 
           // bold inline text (**)
           const lines = doc.splitTextToSize(currentText, 180 - (indent - 14));
-          
+
           lines.forEach(line => {
             if (yPos > pageHeight - 20) {
               doc.addPage();
@@ -185,7 +198,7 @@ function App() {
         // use html2canvas to capture the chart area as a high-res image
         const canvas = await html2canvas(chartElement, {
           scale: 2, // high res
-          backgroundColor: '#0f172a', 
+          backgroundColor: '#0f172a',
           useCORS: true
         });
 
@@ -313,7 +326,7 @@ function App() {
     return (
       <div className="app-container">
         <div className="welcome-screen">
-          <div style={{ marginBottom: 20 }}><img alt='infinity logo' src="/src/assets/infinity_logo.png" style={{ maxWidth: '75px', height: 'auto' }}/></div>
+          <div style={{ marginBottom: 20 }}><img alt='infinity logo' src={infinityLogo} style={{ maxWidth: '75px', height: 'auto' }} /></div>
           <h1>CloudAppX</h1>
           <p>Technical Debt Prioritization System v3.0</p>
           <button className="start-btn" onClick={handleStart}>Initialize System</button>
