@@ -8,7 +8,7 @@ export default API_URL;
 export const fetchTickets = async () => {
     try {
         // Call the endpoint defined in main.py
-        const response = await axios.get('${API_URL}/api/tickets');
+        const response = await axios.get(`${API_URL}/api/tickets`);
         return response.data;
     } catch (error) {
         console.error("Error connecting to the API:", error);
