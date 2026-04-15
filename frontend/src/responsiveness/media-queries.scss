@@ -40,6 +40,9 @@
     .ai-panel .ai-panel-content{
         padding: 30px 0px;
     }
+    .view-toggle-btn{
+        display: none !important;
+    }
 }
 @media screen and (max-width: 585px) {
     .chart-tabs{
@@ -52,9 +55,7 @@
             justify-content: center;
         }
     }
-    .view-toggle-btn{
-        display: none;
-    }
+    
 }
 @media screen and (max-width: 450px) {
     .chart-tabs{
