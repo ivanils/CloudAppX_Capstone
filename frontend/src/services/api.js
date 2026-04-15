@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-// base url pf the fastapi backend )
+// base url of the fastapi backend )
 const API_URL = 'http://127.0.0.1:8000';
 
 // Fetches the prioritized tickets from the API.
