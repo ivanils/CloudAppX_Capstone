@@ -29,20 +29,14 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# CORS configuration (crucial for the communication between the front and the backend)
-# Allow requests from localhost ports normally used by react.
-origin_points = [
-    "http://localhost:3000",  
-    "http://localhost:5173",  
-    "http://127.0.0.1:3000",
-    "http://127.0.0.1:5173",
-]
+# CORS configuration (for the communication between the front and the backend)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origin_points, 
-    allow_credentials=True,      
-    allow_methods=["*"],         
-    allow_headers=["*"],         
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Data model for receiving tickets front the front end (just if needed in future)
