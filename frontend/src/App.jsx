@@ -5,7 +5,7 @@ import TopBarChart from './components/TopBarChart';
 import AIAnalyst from './components/AiAnalysis';
 import SprintSimulator from './components/SprintSimulator';
 import { toast } from 'sonner';
-import infinityLogo from '../assets/infinity_logo.png';
+import infinityLogo from './assets/infinity_logo.png';
 
 // Librerías para PDF Híbrido
 import jsPDF from 'jspdf';
