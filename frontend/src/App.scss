@@ -589,18 +589,33 @@ body {
 }
 
 // selected state for ticket cards
+.score-circle{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    background: rgba(249, 115, 22, 0.2);
+    color: #f97316;
+    border: 1px solid #f97316;
+    
+}
 .ticket-card.is-selected {
     border-color: $highlight-orange;
     background: rgba($highlight-orange, 0.05);
     box-shadow: 0 0 15px rgba($highlight-orange, 0.2);
-
     .score-circle {
         background: $highlight-orange !important;
         color: white !important;
         box-shadow: 0 0 10px rgba($highlight-orange, 0.5);
     }
 }
-
+.tickets-container.list-view .score-circle{
+    margin-right: 15px;
+}
 // Carousel aniamtions
 
 // Overflow container for the charts
@@ -867,7 +882,8 @@ html {
             }
 
             .animate-pulse {
-                color: #a78bfa;
+                color: #ffffff;
+                text-shadow: 0 0 5px rgb(162, 0, 255);
             }
         }
     }

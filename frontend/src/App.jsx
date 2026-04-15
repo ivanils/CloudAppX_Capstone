@@ -78,24 +78,103 @@ function App() {
 
       let yPos = 50;
 
-      // 2. AI SUMMARY (Vectorial)
+      // 2. AI SUMMARY 
       if (aiReportText) {
-        doc.setTextColor(0, 0, 0);
-        doc.setFontSize(14);
+        const primaryColor = [54, 105, 199]; // #3669c7 
+        const textColor = [51, 65, 85];    
+        const pageHeight = doc.internal.pageSize.getHeight();
+
+        // sec title
+        doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+        doc.setFontSize(16);
+        doc.setFont("helvetica", "bold");
         doc.text("Executive AI Summary", 14, yPos);
-        yPos += 8;
+        yPos += 10;
 
-        doc.setFontSize(10);
-        doc.setTextColor(51, 65, 85);
-        // const cleanText = aiReportText.replace(/\*\*/g, ''); // Limpiar markdown básico
-        const splitText = doc.splitTextToSize(aiReportText, 180);
-        doc.text(splitText, 14, yPos);
+        const paragraphs = aiReportText.split('\n');
 
-        yPos += (splitText.length * 5) + 10;
+        paragraphs.forEach(paragraph => {
+          if (paragraph.trim() === '') {
+            yPos += 3;
+            return;
+          }
+
+          let currentText = paragraph;
+          let indent = 14;
+          let isTitle = false;
+
+          // titles styles ( ## and ###)
+          if (currentText.startsWith('## ')) {
+            doc.setFontSize(14);
+            doc.setFont("helvetica", "bold");
+            doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+            currentText = currentText.replace(/^##\s/, '');
+            isTitle = true;
+          } 
+          else if (currentText.startsWith('### ')) {
+            doc.setFontSize(12);
+            doc.setFont("helvetica", "bold");
+            doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+            currentText = currentText.replace(/^###\s/, '');
+            isTitle = true;
+          }
+          // list styles ( * and - )
+          else if (currentText.trim().startsWith('* ') || currentText.trim().startsWith('- ')) {
+            doc.setFontSize(10);
+            doc.setFont("helvetica", "normal");
+            doc.setTextColor(textColor[0], textColor[1], textColor[2]);
+            indent = currentText.startsWith('  ') ? 22 : 18;
+            currentText = currentText.trim().replace(/^[-]\s/, '•  ');
+          } 
+          // regular text
+          else {
+            doc.setFontSize(10);
+            doc.setFont("helvetica", "normal");
+            doc.setTextColor(textColor[0], textColor[1], textColor[2]);
+          }
+
+          // bold inline text (**)
+          const lines = doc.splitTextToSize(currentText, 180 - (indent - 14));
+          
+          lines.forEach(line => {
+            if (yPos > pageHeight - 20) {
+              doc.addPage();
+              yPos = 20;
+            }
+
+            if (isTitle) {
+              doc.text(line, indent, yPos);
+            } else {
+              let xOffset = indent;
+              const parts = line.split(/(\*\*.*?\*\*)/g); // Divide la línea por los tags **
+
+              parts.forEach(part => {
+                if (part.startsWith('**') && part.endsWith('**')) {
+                  // blue blod fragments
+                  const boldText = part.replace(/\*\*/g, '');
+                  doc.setFont("helvetica", "bold");
+                  doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+                  doc.text(boldText, xOffset, yPos);
+                  xOffset += doc.getTextWidth(boldText);
+                } else {
+                  // regular fragments
+                  doc.setFont("helvetica", "normal");
+                  doc.setTextColor(textColor[0], textColor[1], textColor[2]);
+                  doc.text(part, xOffset, yPos);
+                  xOffset += doc.getTextWidth(part);
+                }
+              });
+            }
+            yPos += 6;
+          });
+          yPos += 2; // spacing between paragraphs
+        });
+
+        yPos += 10;
       }
 
-      // 3. CHART SNAPSHOT (Imagen)
-      // Capturamos SOLO el div del gráfico
+      // 3. CHART SNAPSHOT 
+      // capture only the chart section 
       const chartElement = document.getElementById('chart-capture-zone');
       if (chartElement) {
         doc.setFontSize(14);
@@ -103,22 +182,21 @@ function App() {
         doc.text("Current Visualization Snapshot", 14, yPos);
         yPos += 5;
 
-        // Usamos html2canvas solo en esta zona
+        // use html2canvas to capture the chart area as a high-res image
         const canvas = await html2canvas(chartElement, {
-          scale: 2, // Alta resolución
-          backgroundColor: '#0f172a', // Mantener fondo oscuro
+          scale: 2, // high res
+          backgroundColor: '#0f172a', 
           useCORS: true
         });
 
         const imgData = canvas.toDataURL('image/png');
 
-        // Ajustamos la imagen al ancho del PDF (A4 = 210mm ancho)
-        // Margen 14mm, Ancho util ~180mm. Altura proporcional.
+        // adjust image size to fit within PDF width while maintaining aspect ratio
         const imgProps = doc.getImageProperties(imgData);
-        const pdfWidth = 180;
+        const pdfWidth = 140;
         const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
-        // Si la imagen no cabe en la página, añadimos una nueva
+        // new page if image exceeds remaining space
         if (yPos + pdfHeight > 280) {
           doc.addPage();
           yPos = 20;

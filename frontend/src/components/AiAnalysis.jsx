@@ -3,6 +3,9 @@ import axios from "axios";
 import { Bot, FileText, Sparkles, X } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { toast } from "sonner";
+import { Quantum } from 'ldrs/react'
+import 'ldrs/react/Quantum.css'
+
 
 const AiAnalyst = ({ onReportGenerated, onStateChange }) => {
     const [loading, setLoading] = useState(false);
@@ -72,15 +75,15 @@ const AiAnalyst = ({ onReportGenerated, onStateChange }) => {
                         </button>
                     </div>
 
-                    {/* Content Area con Scroll */}
+                    {/* Content Area with Scroll */}
                     <div className="ai-panel-content">
                         {loading ? (
                             <div className="ai-loading">
-                                <div className="spinner"></div>
-                                <p className="animate-pulse">Analyzing data points...</p>
+                                <Quantum size="65" speed="3.75" color="white"/>
+                                <p className="animate-pulse">Analyzing data points... </p>
                             </div>
                         ) : (
-                            // AQUI ESTA LA MAGIA DEL MARKDOWN
+                            //  MARKDOWN
                             <div className="markdown-content">
                                 <ReactMarkdown>{report}</ReactMarkdown>
                             </div>

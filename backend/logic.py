@@ -2,13 +2,13 @@ import json
 import pandas as pd
 import os
 
-# Definimos la ruta al archivo JSON
+# defining the path to the JSON data file 
 # alternative source so it can be read in any OS
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_FILE = os.path.join(BASE_DIR, 'data', 'mock_data.json')
 
 def load_data():
-    # Load the tickets from the JSON file and convert to a Pandas DataFrame. Like connecting to a DB or Jira.
+    # load the tickets from the JSON file and convert to a Pandas DataFrame. Like connecting to a DB or Jira.
     try:
         with open(DATA_FILE, 'r') as main_data_file:
             data = json.load(main_data_file)
@@ -18,28 +18,28 @@ def load_data():
         return pd.DataFrame()
 
 def calculate_priority(data_file):
-    # Apply the weighted scoring model algorithm to calculate priority scores.
+    # apply the weighted scoring model algorithm to calculate priority scores.
     # weights based on Assessment 2 investigation.
     w_business = 0.6
     w_severity = 0.4
     
-    # Algorithm formula:
+    # algorithm formula:
     # Priority = ((Business Value * weight) + (Severity * weight)) / (Effort / 100)
     # Dividing the effort by 100 to normalize it and avoid excessive penalty for long tasks.
-    # Adding +1 to the denominator to avoid division by zero if effort is 0.
+    # adding +1 to the denominator to avoid division by zero if effort is 0.
     
     data_file['score'] = (
         (data_file['business_value'] * w_business) + 
         (data_file['severity'] * w_severity)
     ) / ((data_file['effort_hours'] / 100) + 1)
     
-    # Rounding the score to 2 decimals for better readability
+    # rounding the score to 2 decimals for better readability
     data_file['score'] = data_file['score'].round(2)
     
     return data_file
 
 def get_prioritized_tickets():
-    # Main function to be called by the API.
+    # Main function to be called by the API
     df = load_data()
     if df.empty:
         return []

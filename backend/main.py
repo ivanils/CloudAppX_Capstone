@@ -95,20 +95,47 @@ async def analyze_ticket():
             model="gemini-2.5-flash",
             contents=prompt
         )
+        print(response.text)
         return {"analysis": response.text}
     
     except Exception as e:
         print(f"Error during ticket analysis: {e}")
         fallback_report = """
 
-        **Critical Risk Analysis:**
-        Based on the metadata, the **SQL Injection vulnerability (TIC-019)** is the highest priority threat. It exposes the entire database to unauthorized access, carrying a severity score of 5/5.
+This report provides a critical assessment of the current technical debt backlog for CloudAppX, highlighting immediate risks and proposing strategic actions to safeguard business operations and maintain customer trust.
 
-        **Strategic Recommendation:**
-        Allocate senior backend resources immediately to patch TIC-019 and TIC-001 (Payment Gateway). Pause low-value UI tasks like "Dark Mode" until critical stability is restored.
+## 1. Most Critical Risk Detected
 
-        **Business Impact:**
-        Ignoring these risks could result in a **major data breach** and payment processing failures, potentially costing CloudAppX over $50k in churn this quarter.
+The most critical immediate risk identified is **Ticket TIC-019: Hardcoded credentials in config file** (Severity: 5, Business Value: 10, Effort Hours: 2h). This vulnerability represents a fundamental security flaw that, if exploited, can lead to **complete system compromise, unauthorized data access, and potential data exfiltration.** Its extremely low remediation effort, coupled with the catastrophic potential impact, makes it an urgent priority.
+
+Beyond this singular point, the aggregate risk posed by multiple **Severity 5 security vulnerabilities** (including TIC-005: SQL Injection and TIC-022: XSS) and **critical operational failures** (TIC-001: Payment Gateway Timeout on High Load) indicates a substantial and immediate threat landscape that requires prompt and decisive action.
+
+## 2. Strategic Recommendation for the Next Sprint
+
+For the upcoming sprint, I recommend a **laser-focused initiative on resolving critical security vulnerabilities and immediate revenue-impacting issues.** Specifically, the following tickets should be prioritized and addressed as foundational for business continuity and security:
+
+*   **Security Foundation (Highest Priority):**
+    *   **TIC-019: Hardcoded credentials in config file (2h)**: Resolve this critical vulnerability immediately to prevent system-wide compromise.
+    *   **TIC-005: SQL Injection vulnerability in Search (8h)**: Mitigate the direct risk of data breaches and database compromise.
+    *   **TIC-022: XSS vulnerability in User Comments (12h)**: Prevent user account compromise and protect customer data integrity.
+*   **Business Continuity & Revenue Assurance:**
+    *   **TIC-001: Critical: Payment Gateway Timeout on High Load (15h)**: Address this direct threat to revenue generation, customer experience, and operational stability during peak periods.
+*   **System Stability & Performance:**
+    *   **TIC-011: Memory Leak in Notification Service (20h)**: Prevent service degradation, potential outages, and ensure reliable customer communication.
+
+This strategic allocation ensures that the most severe threats to CloudAppX's security posture and core revenue streams are addressed without delay, laying a more stable foundation for future development and sustained growth.
+
+## 3. Potential Business Impact if Ignored
+
+Ignoring the identified critical technical debt would expose CloudAppX to severe and multifaceted business impacts, fundamentally jeopardizing its operational integrity and market position:
+
+*   **Significant Financial Losses:** Direct revenue loss from failed payment transactions (TIC-001), inaccuracies in billing (TIC-046), potential regulatory fines (e.g., GDPR violations from data breaches), and substantial costs associated with incident response and litigation.
+*   **Catastrophic Reputational Damage:** Data breaches resulting from hardcoded credentials or SQL injection could permanently erode customer trust, attract widespread negative media attention, and lead to substantial customer churn. Unreliable services, particularly payment processing, would further damage brand perception and market standing.
+*   **Operational Instability and Outages:** Unresolved issues like the payment gateway timeout and memory leak could lead to frequent service disruptions, degraded performance, and potential system downtime, directly impacting service level agreements (SLAs) and overall user experience.
+*   **Increased Security Risk:** Unaddressed vulnerabilities leave CloudAppX highly susceptible to sophisticated cyberattacks, unauthorized data access, and complete system compromise, threatening both company assets and sensitive customer data.
+*   **Reduced Development Velocity and Morale:** Continuous firefighting to address critical production issues drains engineering resources, detracts from strategic feature development, leads to developer burnout, and significantly slows innovation and time-to-market.
+
+Addressing these critical items proactively is not merely a technical exercise but an essential strategic imperative to safeguard CloudAppX's financial health, reputation, and long-term viability in a competitive SaaS market.
         """
         return {"analysis": fallback_report}
         
