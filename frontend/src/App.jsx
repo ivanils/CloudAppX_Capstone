@@ -40,31 +40,18 @@ function App() {
 
   // --- LIFECYCLE ---
   useEffect(() => {
-    const prefetchData = async () => {
-      try {
-        const data = await fetchTickets();
-        setTickets(data); 
-      } catch (error) {
-        console.error("Waking up server error:", error);
-      }
-    };
-
-    prefetchData();
   }, []);
 
   const handleStart = async () => {
     setScreen('loading');
-    // setTimeout(async () => {
-    //   try {
-    //     const data = await fetchTickets();
-    //     setTickets(data);
-    //     setScreen('dashboard');
-    //   } catch (error) {
-    //     console.error("Error booting system", error);
-    //   }
-    // }, 1500);
-    setTimeout(() => {
-      setScreen('dashboard');
+    setTimeout(async () => {
+      try {
+        const data = await fetchTickets();
+        setTickets(data);
+        setScreen('dashboard');
+      } catch (error) {
+        console.error("Error booting system", error);
+      }
     }, 1500);
   };
 
@@ -78,7 +65,7 @@ function App() {
       const today = new Date().toLocaleDateString();
 
       // 1. HEADER (Vectorial)
-      doc.setFillColor(15, 23, 42); // Azul Oscuro
+      doc.setFillColor(15, 23, 42); 
       doc.rect(0, 0, 210, 40, 'F');
 
       doc.setTextColor(255, 255, 255);
