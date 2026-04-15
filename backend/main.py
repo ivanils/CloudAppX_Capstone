@@ -136,7 +136,7 @@ Ignoring the identified critical technical debt would expose CloudAppX to severe
 Addressing these critical items proactively is not merely a technical exercise but an essential strategic imperative to safeguard CloudAppX's financial health, reputation, and long-term viability in a competitive SaaS market.
         """
         return {"analysis": fallback_report}
-@app.get("/ping")
+@app.api_route("/ping", methods=["GET", "HEAD"])
 def keep_alive():
     return {"status": "awake"}      
         
